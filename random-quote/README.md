@@ -1,3 +1,5 @@
+# -- WIP -- WIP -- WIP -- WIP -- WIP -- WIP -- WIP -- WIP -- WIP --
+
 # Random-quote
 
 Proposes multiple pieces of a text, selected randomly, to be used as quotes.
