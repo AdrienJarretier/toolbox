@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <script src="../extLibs/jquery-3.4.1.min.js"></script>
+  <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+  </link>
+
+  <script src="chroma.min-2.1.2.js"></script>
+  <script src="utils.js"></script>
+
+  <style>
+    body {
+      padding-top: 20px;
+      background-color: hsl(240, 3%, 14%);
+      color: white;
+    }
+
+    .form-control,
+    .form-control:focus,
+    .form-control[readonly] {
+      background-color: rgb(67, 67, 71);
+      color: white;
+    }
+
+    input {
+      width: 500px;
+    }
+  </style>
+
+  <script type="module">
+
+    function setColor(element, color) {
+      element
+        .text(color)
+        .css('background-color', color);
+
+      if (chroma.contrast(color, 'white') < chroma.contrast(color, 'black')) {
+        element.css('color', 'black');
+      }
+    }
+
+    $(function () {
+
+      $('form').submit(function (e) {
+        e.preventDefault();
+
+        let colorsList = parseForm($(this))['inputColors'].split(',');
+
+        for (let i in colorsList) {
+          colorsList[i] = chroma(
+            colorsList[i].replaceAll('\'', '').trim()
+          );
+        }
+
+        const scale = chroma.scale(colorsList);
+
+        for (let colorsCount = 2; colorsCount <= 7; ++colorsCount) {
+
+          let outputColorsHexs = [];
+
+          let row = $(`<div class="row mt-3">`).appendTo('#scalesOutput');
+
+          let col = $('<div class="col">')
+            .text(colorsCount + ' : ')
+            .appendTo(row);
+
+          for (let i = 0; i < colorsCount; ++i) {
+            let colorHex = scale(i / (colorsCount - 1)).hex()
+            outputColorsHexs.push(colorHex);
+            setColor(
+              $('<span class="colorOutput p-1 d-inline-block">')
+                .appendTo(col),
+              colorHex
+            );
+          }
+
+          $(`<div class="row mt-3">`)
+            .append(
+              $('<div class="col">')
+                .text(colorsCount + ' : ' + JSON.stringify(outputColorsHexs))
+            )
+            .appendTo('#scalesOutputJson');
+        }
+
+      });
+
+    });
+  </script>
+
+</head>
+
+
+<body class="font-monospace">
+
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col">
+
+        <form>
+          <input class="form-control" type="text" name="inputColors">
+        </form>
+
+      </div>
+    </div>
+
+    <div id="scalesOutput"></div>
+
+    <div id="scalesOutputJson"></div>
+
+  </div>
+
+</body>
+
+</html>
