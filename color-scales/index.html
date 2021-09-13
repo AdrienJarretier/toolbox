@@ -49,11 +49,11 @@
       $('form').submit(function (e) {
         e.preventDefault();
 
-        let colorsList = parseForm($(this))['inputColors'].split(',');
+        let colorsList = parseForm($(this))['inputColors'].split(/,(?![^\(]*\))/);
 
         for (let i in colorsList) {
           colorsList[i] = chroma(
-            colorsList[i].replaceAll('\'', '').trim()
+            colorsList[i].replaceAll('\'', '').replaceAll('"', '').trim()
           );
         }
 
