@@ -6,11 +6,11 @@ RESOURCES = ['machineParts', 'electronics']
 
 class Stock(MutableMapping):
 
-    def __init__(self, initializer):
+    def __init__(self, initializer={}):
         self._stock = {}
 
         for resource in RESOURCES:
-            if initializer[resource]:
+            if resource in initializer:
                 self._stock[resource] = initializer[resource]
             else:
                 self._stock[resource] = 0
@@ -29,6 +29,14 @@ class Stock(MutableMapping):
 
     def __len__(self):
         return self._stock.__len__()
+
+    def combine(self, otherStock):
+        newStock = copy.deepcopy(self)
+
+        for resource in RESOURCES:
+            newStock[resource] += otherStock[resource]
+
+        return newStock
 
 
 currentStock = Stock({
@@ -90,11 +98,26 @@ print('initial stock :')
 printStocks(currentStock)
 print()
 
-# supplies =
+supplies = Stock()
 
-for i in range(2):
+potentialNewStocks = []
+
+for i in range(100):
     expectedStock = getExpectedStock(newStock)
     maxMissing = getMaxMissing(expectedStock)
-    newStock[maxMissing['resource']] += 5
-    print('max missing :', maxMissing)
-    printStocks(newStock)
+    potentialNewStocks.append({
+        'stock': copy.deepcopy(newStock),
+        'maxMissing': maxMissing,
+        'supplies': copy.deepcopy(supplies)
+    })
+
+    supplies[maxMissing['resource']] += 5
+    newStock = newStock.combine(supplies)
+    # print('max missing :', maxMissing)
+
+potentialNewStocks.sort(key=lambda s: s['maxMissing']['qty'], reverse=True)
+
+print('potentialNewStocks:')
+for s in potentialNewStocks:
+    print(s['stock']._stock, 'missing :',
+          s['maxMissing'], 'supplies :', s['supplies']._stock)
