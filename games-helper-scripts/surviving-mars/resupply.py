@@ -1,14 +1,45 @@
 import copy
+from collections.abc import MutableMapping
 
-currentStock = {
+RESOURCES = ['machineParts', 'electronics']
+
+
+class Stock(MutableMapping):
+
+    def __init__(self, initializer):
+        self._stock = {}
+
+        for resource in RESOURCES:
+            if initializer[resource]:
+                self._stock[resource] = initializer[resource]
+            else:
+                self._stock[resource] = 0
+
+    def __getitem__(self, key):
+        return self._stock.__getitem__(key)
+
+    def __setitem__(self, key, val):
+        return self._stock.__setitem__(key, val)
+
+    def __delitem__(self, key):
+        return self._stock.__delitem__(key)
+
+    def __iter__(self):
+        return self._stock.__iter__()
+
+    def __len__(self):
+        return self._stock.__len__()
+
+
+currentStock = Stock({
     "machineParts": 8,
     "electronics": 2
-}
+})
 
-consumption = {
+consumption = Stock({
     "machineParts": 0.6,
     "electronics": 0.5
-}
+})
 
 
 newStock = copy.deepcopy(currentStock)
@@ -35,30 +66,35 @@ def getExpectedStock(stock):
 
 def printStocks(stock):
     print('expected ', getExpectedStock(stock))
-    print('stock    ', stock)
+    print('stock    ', stock._stock)
     print()
 
 
-printStocks(currentStock)
+def getMaxMissing(expectedStock):
+    maxMissing = {
+        'qty': 0,
+        'resource': None
+    }
 
-
-def incSupplies():
-
-    expectedStock = getExpectedStock(newStock)
-
-    maxMissing = 0
-    resourceToInc = None
     for resource in expectedStock:
-        print(resource, newStock[resource]-expectedStock[resource])
 
         missing = expectedStock[resource]-newStock[resource]
-        if missing > maxMissing:
-            maxMissing = missing
-            resourceToInc = resource
+        if missing >= maxMissing['qty']:
+            maxMissing['qty'] = missing
+            maxMissing['resource'] = resource
 
-    newStock[resourceToInc] += 5
+    return maxMissing
 
+
+print('initial stock :')
+printStocks(currentStock)
+print()
+
+# supplies =
+
+for i in range(2):
+    expectedStock = getExpectedStock(newStock)
+    maxMissing = getMaxMissing(expectedStock)
+    newStock[maxMissing['resource']] += 5
+    print('max missing :', maxMissing)
     printStocks(newStock)
-
-
-incSupplies()
