@@ -2,6 +2,7 @@ import copy
 from collections.abc import MutableMapping
 
 RESOURCES = ['machineParts', 'electronics']
+COSTS = [90/5, 100/5]
 
 
 class Stock(MutableMapping):
@@ -38,6 +39,13 @@ class Stock(MutableMapping):
 
         return newStock
 
+    def cost(self):
+        cost = 0
+        for i in range(len(RESOURCES)):
+            cost += self._stock[RESOURCES[i]] * COSTS[i]
+
+        return cost
+
 
 currentStock = Stock({
     "machineParts": 8,
@@ -48,6 +56,8 @@ consumption = Stock({
     "machineParts": 0.6,
     "electronics": 0.5
 })
+
+MAX_COST = 2720/2
 
 
 newStock = copy.deepcopy(currentStock)
@@ -102,7 +112,7 @@ supplies = Stock()
 
 potentialNewStocks = []
 
-for i in range(100):
+while True:
     expectedStock = getExpectedStock(newStock)
     maxMissing = getMaxMissing(expectedStock)
     potentialNewStocks.append({
@@ -113,11 +123,13 @@ for i in range(100):
 
     supplies[maxMissing['resource']] += 5
     newStock = newStock.combine(supplies)
-    # print('max missing :', maxMissing)
+
+    if supplies.cost() > MAX_COST:
+        break
 
 potentialNewStocks.sort(key=lambda s: s['maxMissing']['qty'], reverse=True)
 
 print('potentialNewStocks:')
 for s in potentialNewStocks:
     print(s['stock']._stock, 'missing :',
-          s['maxMissing'], 'supplies :', s['supplies']._stock)
+          s['maxMissing'], 'supplies :', s['supplies']._stock, s['supplies'].cost())
