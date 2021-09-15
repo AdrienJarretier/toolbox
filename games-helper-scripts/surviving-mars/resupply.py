@@ -1,4 +1,4 @@
-import copy 
+import copy
 
 currentStock = {
     "machineParts": 8,
@@ -22,27 +22,54 @@ consumption = {
 #     return abs(1.2-(m+mx)/(e+ex))
 
 
-totalStock = 0
-tmpConsumptionParts = 0
-
-expectedStock = {}
-
-for resource in currentStock:
-    totalStock += currentStock[resource]
-    tmpConsumptionParts += consumption[resource]
-
-tmpStockPerPart = totalStock/tmpConsumptionParts
-
-for resource in currentStock:
-
-    expectedStock[resource] = tmpStockPerPart * consumption[resource]
-
 newStock = copy.deepcopy(currentStock)
 
-newStock['electronics'] += 5
 
-print('expected ', expectedStock)
-print('new stock', newStock)
+def getExpectedStock(stock):
+    totalStock = 0
+    tmpConsumptionParts = 0
 
-for resource in expectedStock:
-    print(resource, newStock[resource]-expectedStock[resource])
+    expectedStock = {}
+
+    for resource in stock:
+        totalStock += stock[resource]
+        tmpConsumptionParts += consumption[resource]
+
+    tmpStockPerPart = totalStock/tmpConsumptionParts
+
+    for resource in stock:
+
+        expectedStock[resource] = tmpStockPerPart * consumption[resource]
+
+    return expectedStock
+
+
+def printStocks(stock):
+    print('expected ', getExpectedStock(stock))
+    print('stock    ', stock)
+    print()
+
+
+printStocks(currentStock)
+
+
+def incSupplies():
+
+    expectedStock = getExpectedStock(newStock)
+
+    maxMissing = 0
+    resourceToInc = None
+    for resource in expectedStock:
+        print(resource, newStock[resource]-expectedStock[resource])
+
+        missing = expectedStock[resource]-newStock[resource]
+        if missing > maxMissing:
+            maxMissing = missing
+            resourceToInc = resource
+
+    newStock[resourceToInc] += 5
+
+    printStocks(newStock)
+
+
+incSupplies()
