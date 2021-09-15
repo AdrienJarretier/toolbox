@@ -11,17 +11,6 @@ consumption = {
 }
 
 
-# def resupply(machineParts, electronics):
-#     newStock = {
-#         "machineParts": currentStock["machineParts"]+machineParts,
-#         "electronics": currentStock["electronics"]+electronics
-#     }
-
-#     newStock["machineParts"]
-
-#     return abs(1.2-(m+mx)/(e+ex))
-
-
 newStock = copy.deepcopy(currentStock)
 
 
