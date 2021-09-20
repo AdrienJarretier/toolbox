@@ -15,32 +15,36 @@ except FileNotFoundError:
     print('Add ' + CENSOR_LIST_FILENAME)
     exit()
 
-
-print(CENSOR_LIST)
-
-
 # print(os.listdir(INPUT_DIR))
 
 
-filename = os.path.join(INPUT_DIR, 'test.txt')
-outFilename = os.path.join(OUTPUT_DIR, 'test.txt')
+def safeguardFile(filename):
 
-with open(filename) as inFile:
+    inFilePath = os.path.join(INPUT_DIR, filename)
+    outFilePath = os.path.join(OUTPUT_DIR, filename)
 
-    with open(outFilename, 'w') as outFile:
+    print(inFilePath)
+    print(outFilePath)
 
-        for line in inFile:
+    with open(inFilePath) as inFile:
 
-            words = re.split('(\W)', line)
-            for i in range(len(words)):
+        with open(outFilePath, 'w') as outFile:
 
-                word = words[i]
-                if word in CENSOR_LIST:
-                    words[i] = '.'.join(list(word))
+            for line in inFile:
 
-            line = ''.join(words)
+                words = re.split('(\W)', line)
+                for i in range(len(words)):
 
-            outFile.write(line)
+                    word = words[i]
+                    if word in CENSOR_LIST:
+                        words[i] = '.'.join(list(word))
+
+                line = ''.join(words)
+
+                outFile.write(line)
 
 
-# for file in os.listdir(INPUT_DIR):
+for filename in os.listdir(INPUT_DIR):
+
+    if filename != '.gitignore':
+        safeguardFile(filename)
