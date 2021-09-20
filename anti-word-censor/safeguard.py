@@ -1,4 +1,5 @@
 import os
+import re
 
 INPUT_DIR = 'inputs'
 OUTPUT_DIR = 'outputs'
@@ -22,18 +23,24 @@ print(CENSOR_LIST)
 
 
 filename = os.path.join(INPUT_DIR, 'test.txt')
+outFilename = os.path.join(OUTPUT_DIR, 'test.txt')
 
 with open(filename) as inFile:
 
-    for line in inFile:
+    with open(outFilename, 'w') as outFile:
 
-        words = line.split()
-        for i in range(len(words)):
+        for line in inFile:
 
-            word = words[i]
-            if word in CENSOR_LIST:
-                pass
+            words = re.split('(\W)', line)
+            for i in range(len(words)):
 
-                # todo
+                word = words[i]
+                if word in CENSOR_LIST:
+                    words[i] = '.'.join(list(word))
 
-                # for file in os.listdir(INPUT_DIR):
+            line = ''.join(words)
+
+            outFile.write(line)
+
+
+# for file in os.listdir(INPUT_DIR):
