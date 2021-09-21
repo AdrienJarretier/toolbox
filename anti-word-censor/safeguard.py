@@ -1,5 +1,7 @@
 import os
 import re
+import string
+import random
 
 INPUT_DIR = 'inputs'
 OUTPUT_DIR = 'outputs'
@@ -16,6 +18,19 @@ except FileNotFoundError:
     exit()
 
 # print(os.listdir(INPUT_DIR))
+
+
+def safeguardWord(word):
+
+    wordChars = list(word)
+    outputWord = ''
+    for i in range(len(wordChars)-1):
+        safetyChar = random.choice(
+            ['', ' ', '.', random.choice(string.punctuation)])
+        outputWord += wordChars[i]+safetyChar
+
+    outputWord += wordChars[-1]
+    return outputWord
 
 
 def safeguardFile(filename):
@@ -37,7 +52,7 @@ def safeguardFile(filename):
 
                     word = words[i]
                     if word in CENSOR_LIST:
-                        words[i] = '.'.join(list(word))
+                        words[i] = safeguardWord(words[i])
 
                 line = ''.join(words)
 
