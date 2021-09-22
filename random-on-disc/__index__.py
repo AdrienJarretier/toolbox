@@ -24,4 +24,4 @@ for i in range(2000):
 
     points.append(pickPoint())
 
-plotPoints(points, [[0, 0, 0, 1/4]])
+plotPoints(points, RADIUS, color=[[0, 0, 0, 1/4]])
