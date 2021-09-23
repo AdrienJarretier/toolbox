@@ -21,11 +21,12 @@ def pickPoint():
     x = math.sqrt(pickedRadius)*math.cos(pickedAngle)+RADIUS
     y = math.sqrt(pickedRadius)*math.sin(pickedAngle)+RADIUS
 
-    return Point(x, y)
+    return (x, y)
 
 
-for i in range(10):
+for i in range(1):
 
-    points.append(pickPoint())
+    x, y = pickPoint()
+    points.append(Point(x, y, i))
 
 plotPoints(points, RADIUS, color=[[1, 0, 0, 1/2]], backgroundImage=img)

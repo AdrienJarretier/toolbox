@@ -15,4 +15,9 @@ def plotPoints(points: list[Point], radius=1.0, color=[[0, 0, 0, 1/5]], backgrou
     ax = fig.gca()
     ax.add_patch(circle)
     plt.scatter(transposedPoints[0], transposedPoints[1], c=color)
+
+    for point in points:
+        plt.annotate(point.label,  # this is the text
+                     point._data)
+
     plt.show()
