@@ -14,3 +14,6 @@ class Point(Iterable):
 
     def setLabel(self, label):
         self.label = label
+
+    def distance(self, otherPoint):
+        return ((self.x-otherPoint.x)**2+(self.y-otherPoint.y)**2)**0.5
