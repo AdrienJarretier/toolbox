@@ -36,14 +36,22 @@ def sortByDistanceFromCenter(points):
     points.sort(key=lambda p: math.sqrt(p.x**2+p.y**2))
 
 
-def argmin(list, key):
-    index_min = 0
-    val_min = key(list[index_min])
+def argmin(list, key, excluded=[]):
+    excluded = excluded.copy()
+
+    index_min = None
+    val_min = np.Inf
     for i in range(len(list)):
-        e = list[i]
-        if key(e) < val_min:
-            val_min = key(e)
-            index_min = i
+        # if i in excluded : remove i from excluded and continue to next iteration
+        try:
+            exc_index = excluded.index(i)
+            excluded.pop(exc_index)
+        # if i not in excluded, compare list[i] to val_min
+        except:
+            e = list[i]
+            if key(e) < val_min:
+                val_min = key(e)
+                index_min = i
 
     return index_min
 
@@ -61,20 +69,17 @@ def tspNearestNeighbour(points, distanceMatrix=None):
     def compare(col):
         return lambda line: line[col] if line[col] > 0 else np.Inf
 
-
     index_min = argmin(distMat, compare(0))
     print()
     print(index_min)
     print(distMat[index_min])
 
     # orderedPoints = []
-    # currentPoint = 
+    # currentPoint =
 
     # while len(distMat) > 0:
- 
+
     #     index_min = argmin(distMat, compare(2))
-
-
 
 
 for i in range(4):
