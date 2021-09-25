@@ -1,7 +1,17 @@
 from collections.abc import Iterable
-
+import numpy as np
 
 class Point(Iterable):
+
+    def distanceMatrix(points):
+
+        matrix = np.zeros((len(points), len(points)))
+
+        for i in range(len(points)):
+            for j in range(len(points)):
+                matrix[i][j] = points[i].distance(points[j])
+
+        return matrix
 
     def __init__(self, x, y, label=''):
         self.x = x
