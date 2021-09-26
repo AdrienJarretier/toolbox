@@ -1,17 +1,11 @@
-import random
-import math
+
+from randomOnDisk import randomPoint
+from tsp import tspNearestNeighbour, routeLength
 import matplotlib.image as mpimg
 import string
 
-import numpy as np
-
 from Point import Point
 from plot import *
-
-SEED = random.randrange(2**64)
-# SEED = 13424815307631118833
-print('seed :', SEED)
-random.seed(SEED)
 
 img = mpimg.imread('test_image.jpg')
 
@@ -21,78 +15,27 @@ RADIUS = max(img.shape[0], img.shape[1])/2
 points = []
 
 
-def pickPoint():
+print('picking random points...')
+for i in range(2):
 
-    pickedAngle = random.uniform(0, 2*math.pi)
-    pickedRadius = random.uniform(0, RADIUS**2)
-
-    x = math.sqrt(pickedRadius)*math.cos(pickedAngle)
-    y = math.sqrt(pickedRadius)*math.sin(pickedAngle)
-
-    return (x, y)
-
-
-def sortByDistanceFromCenter(points):
-    points.sort(key=lambda p: math.sqrt(p.x**2+p.y**2))
-
-
-def argmin(list, key, excluded=[]):
-    excluded = excluded.copy()
-
-    index_min = None
-    val_min = np.Inf
-    for i in range(len(list)):
-        # if i in excluded : remove i from excluded and continue to next iteration
-        try:
-            exc_index = excluded.index(i)
-            excluded.pop(exc_index)
-        # if i not in excluded, compare list[i] to val_min
-        except:
-            e = list[i]
-            if key(e) < val_min:
-                val_min = key(e)
-                index_min = i
-
-    return index_min
-
-
-def tspNearestNeighbour(points, distanceMatrix=None):
-
-    if distanceMatrix is None:
-        # first point is the center of the disk
-        distMat = Point.distanceMatrix([Point(0, 0)] + points)
-    else:
-        distMat = np.copy(distanceMatrix)
-
-    def compare(col):
-        return lambda line: line[col] if line[col] > 0 else np.Inf
-
-    index_min = argmin(distMat, compare(0))
-
-    orderedPointsIndices = [0]
-
-    while len(orderedPointsIndices) < len(points)+1:
-
-        index_min = argmin(distMat, compare(
-            orderedPointsIndices[-1]), orderedPointsIndices)
-        orderedPointsIndices.append(index_min)
-
-    return orderedPointsIndices[1:]
-
-
-for i in range(9):
-
-    x, y = pickPoint()
-    p = Point(x, y, string.ascii_uppercase[i])
+    x, y = randomPoint(RADIUS)
+    p = Point(x, y, string.ascii_uppercase[i%26])
     points.append(p)
 
+
+print('solving tsp...')
 orderedPointsIndices = tspNearestNeighbour(points)
+print('tsp solved')
 
 orderedPoints = []
 for i in range(len(orderedPointsIndices)):
     orderedPointIndex = orderedPointsIndices[i]
     point = points[orderedPointIndex-1]
+    # point.setLabel('')
     point.setLabel(point.label + str(i+1))
     orderedPoints.append(point)
 
+print('plotting points')
+print('route length :', routeLength(orderedPoints))
 plotPoints(orderedPoints, RADIUS, color=[[1, 0, 0, 1/2]], backgroundImage=img)
+
