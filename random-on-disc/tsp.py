@@ -51,6 +51,10 @@ def tspNearestNeighbour(points, distanceMatrix=None):
 
 
 def routeLength(points):
+
+    if len(points) == 0:
+        return 0
+
     diskCenter = Point(0, 0)
     length = diskCenter.distance(points[0])
     for i in range(1, len(points)):
