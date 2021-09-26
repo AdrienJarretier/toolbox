@@ -22,4 +22,9 @@ def plotPoints(points: list[Point], radius=1.0, color=[[0, 0, 0, 1/5]], backgrou
         plt.annotate(point.label,  # this is the text
                      point._data, color='white')
 
+    plt.plot([0, points[0].x],[0, points[0].y])
+    for i in range(len(points)-1):
+        plt.plot([points[i].x, points[i+1].x],[points[i].y, points[i+1].y])
+    plt.plot([points[-1].x, 0],[points[-1].y, 0])
+
     plt.show()

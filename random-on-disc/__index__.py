@@ -16,7 +16,7 @@ points = []
 
 
 print('picking random points...')
-for i in range(2):
+for i in range(5):
 
     x, y = randomPoint(RADIUS)
     p = Point(x, y, string.ascii_uppercase[i%26])
