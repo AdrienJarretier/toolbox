@@ -8,8 +8,8 @@ import numpy as np
 from Point import Point
 from plot import *
 
-# SEED = random.randrange(2**64)
-SEED = 13424815307631118833
+SEED = random.randrange(2**64)
+# SEED = 13424815307631118833
 print('seed :', SEED)
 random.seed(SEED)
 
@@ -64,30 +64,35 @@ def tspNearestNeighbour(points, distanceMatrix=None):
     else:
         distMat = np.copy(distanceMatrix)
 
-    print(distMat)
-
     def compare(col):
         return lambda line: line[col] if line[col] > 0 else np.Inf
 
     index_min = argmin(distMat, compare(0))
-    print()
-    print(index_min)
-    print(distMat[index_min])
 
-    # orderedPoints = []
-    # currentPoint =
+    orderedPointsIndices = [0]
 
-    # while len(distMat) > 0:
+    while len(orderedPointsIndices) < len(points)+1:
 
-    #     index_min = argmin(distMat, compare(2))
+        index_min = argmin(distMat, compare(
+            orderedPointsIndices[-1]), orderedPointsIndices)
+        orderedPointsIndices.append(index_min)
+
+    return orderedPointsIndices[1:]
 
 
-for i in range(4):
+for i in range(9):
 
     x, y = pickPoint()
     p = Point(x, y, string.ascii_uppercase[i])
     points.append(p)
 
-tspNearestNeighbour(points)
+orderedPointsIndices = tspNearestNeighbour(points)
 
-# plotPoints(points, RADIUS, color=[[1, 0, 0, 1/2]], backgroundImage=img)
+orderedPoints = []
+for i in range(len(orderedPointsIndices)):
+    orderedPointIndex = orderedPointsIndices[i]
+    point = points[orderedPointIndex-1]
+    point.setLabel(point.label + str(i+1))
+    orderedPoints.append(point)
+
+plotPoints(orderedPoints, RADIUS, color=[[1, 0, 0, 1/2]], backgroundImage=img)
