@@ -1,3 +1,4 @@
+from sys import path
 from Point import Point
 import pybnb
 # define a branch-and-bound problem
@@ -16,38 +17,61 @@ class MyProblem(pybnb.Problem):
         return pybnb.minimize
 
     def objective(self):
-        return routeLength(self.path)
+        if len(self.path) < len(self.points):
+            return self.infeasible_objective()
+        else:
+            return routeLength(self.path)
 
     def bound(self):
-        orderedPointsIndices = tspNearestNeighbour(self.path)
-
-        print(orderedPointsIndices)
+        print('-------------------------')
+        print('bound self.path')
+        print(self.path)
+        print('-------------------------')
+        pointsNotInPath = [
+            point for point in self.points if point not in self.path]
+        orderedPointsIndices = tspNearestNeighbour(pointsNotInPath)
 
         orderedPoints = []
         for i in range(len(orderedPointsIndices)):
             orderedPointIndex = orderedPointsIndices[i]
-            point = self.points[orderedPointIndex-1]
+            point = pointsNotInPath[orderedPointIndex-1]
             orderedPoints.append(point)
 
-        length = routeLength(orderedPoints)
-        print('length :', length)
+        length = routeLength(self.path + orderedPoints)
         return length
 
     def save_state(self, node):
-        node.state = self.path
+        print('----------------------------------------')
+        node.state = (self.path.copy(), self.points.copy())
+        print('save_state, node.state')
+        print(node.state)
+        print('----------------------------------------')
 
     def load_state(self, node):
-        self.path = node.state
+        print('----------------------------------------')
+        print('load_state node.state')
+        print(node.state)
+        print('----------------------------------------')
+        (self.path, self.points) = node.state
 
     def branch(self):
 
         for i in range(len(self.points)):
             if self.points[i] not in self.path:
                 child = pybnb.Node()
-                child.state = self.path.append(self.points[i])
+                childPath = self.path.copy()
+                childPath.append(self.points[i])
+                child.state = (childPath, self.points.copy())
+                print('*****************************************')
+                print('branch, child.state')
+                print(child.state)
+                print('*****************************************')
                 yield child
 
 
-def solve(points):
+def bnbSolve(points):
     result = pybnb.solve(MyProblem(points), comm=None)
-    print(result.solution_status)
+    print('best_node')
+    print([p.label for p in result.best_node.state[0]])
+
+    return result.best_node.state[0]
