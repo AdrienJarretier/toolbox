@@ -25,9 +25,11 @@ for i in range(10):
 
 
 def greedySolve(points):
+    points = [Point(0, 0)] + points
     print('solving tsp...')
     orderedPointsIndices = tspNearestNeighbour(points)
     print('tsp solved')
+    print(orderedPointsIndices)
 
     orderedPoints = []
     for i in range(len(orderedPointsIndices)):

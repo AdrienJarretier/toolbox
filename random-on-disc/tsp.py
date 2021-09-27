@@ -30,7 +30,7 @@ def tspNearestNeighbour(points, distanceMatrix=None):
 
     if distanceMatrix is None:
         # first point is the center of the disk
-        distMat = Point.distanceMatrix([Point(0, 0)] + points)
+        distMat = Point.distanceMatrix(points)
     else:
         distMat = np.copy(distanceMatrix)
 
@@ -47,7 +47,7 @@ def tspNearestNeighbour(points, distanceMatrix=None):
             orderedPointsIndices[-1]), orderedPointsIndices)
         orderedPointsIndices.append(index_min)
 
-    return orderedPointsIndices[1:]
+    return orderedPointsIndices
 
 
 def routeLength(points):
@@ -55,11 +55,13 @@ def routeLength(points):
     if len(points) == 0:
         return 0
 
-    diskCenter = Point(0, 0)
-    length = diskCenter.distance(points[0])
+    # diskCenter = Point(0, 0)
+    # length = diskCenter.distance(points[0])
+
+    length = 0
     for i in range(1, len(points)):
         length += points[i-1].distance(points[i])
 
-    length += points[-1].distance(diskCenter)
+    # length += points[-1].distance(diskCenter)
 
     return length
