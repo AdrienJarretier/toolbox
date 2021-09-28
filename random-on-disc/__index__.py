@@ -62,4 +62,3 @@ print('route length:', routeLength(solvedPoints))
 
 labelAddOrder(solvedPoints)
 # plotAll(solvedPoints)
-

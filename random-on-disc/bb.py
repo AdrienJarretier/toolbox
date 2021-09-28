@@ -23,11 +23,6 @@ class MyProblem(pybnb.Problem):
             return routeLength(self.path)
 
     def bound(self):
-        # print('----------- bound --------------')
-        # print(self.path)
-        # print('bound self.path')
-        # print(self.path)
-        # print('-------------------------')
         pointsNotInPath = [self.orig] + [
             point for point in self.points if point not in self.path]
 
@@ -41,21 +36,15 @@ class MyProblem(pybnb.Problem):
         return length
 
     def save_state(self, node):
-        # print('----------------------------------------')
         node.state = (self.path.copy(), self.points.copy())
-        # print('save_state, node.state')
-        # print(node.state)
-        # print('----------------------------------------')
 
     def load_state(self, node):
-        # print('----------------------------------------')
-        # print('load_state node.state')
-        # print(node.state)
-        # print('----------------------------------------')
         (self.path, self.points) = node.state
 
     def branch(self):
 
+        print('branch')
+        print([p.label for p in self.points])
         for i in range(len(self.points)):
             if self.points[i] not in self.path:
                 child = pybnb.Node()
