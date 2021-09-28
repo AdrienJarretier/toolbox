@@ -29,7 +29,6 @@ def argmin(list, key, excluded=[]):
 def tspNearestNeighbour(points, distanceMatrix=None):
 
     if distanceMatrix is None:
-        # first point is the center of the disk
         distMat = Point.distanceMatrix(points)
     else:
         distMat = np.copy(distanceMatrix)
@@ -41,7 +40,7 @@ def tspNearestNeighbour(points, distanceMatrix=None):
 
     orderedPointsIndices = [0]
 
-    while len(orderedPointsIndices) < len(points)+1:
+    while len(orderedPointsIndices) < len(points):
 
         index_min = argmin(distMat, compare(
             orderedPointsIndices[-1]), orderedPointsIndices)

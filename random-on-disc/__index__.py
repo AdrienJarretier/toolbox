@@ -6,18 +6,20 @@ import matplotlib.image as mpimg
 import string
 
 from Point import Point
-from plot import *
+from plot import Plot
 
 img = mpimg.imread('test_image.jpg')
 
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
+POINTS_COUNT = 5
+
 points = []
 
 
 print('picking random points...')
-for i in range(10):
+for i in range(POINTS_COUNT):
 
     x, y = randomPoint(RADIUS)
     p = Point(x, y, string.ascii_uppercase[i % 26])
@@ -30,11 +32,12 @@ def greedySolve(points):
     orderedPointsIndices = tspNearestNeighbour(points)
     print('tsp solved')
     print(orderedPointsIndices)
+    print(points)
 
     orderedPoints = []
     for i in range(len(orderedPointsIndices)):
         orderedPointIndex = orderedPointsIndices[i]
-        point = points[orderedPointIndex-1]
+        point = points[orderedPointIndex]
         # point.setLabel('')
         point.setLabel(point.label + str(i+1))
         orderedPoints.append(point)
@@ -48,5 +51,12 @@ def greedySolve(points):
 solvedPoints = greedySolve(points)
 print('route length:', routeLength(solvedPoints))
 
-# plotPoints(solvedPoints, RADIUS, color=[
-#            [1, 0, 0, 1/2]], backgroundImage=img)
+
+plot = Plot()
+
+plot.plotPoints(solvedPoints, RADIUS, color=[
+    [1, 0, 0, 1/2]], backgroundImage=img)
+
+plot.linkPoints(solvedPoints)
+
+plot.show()

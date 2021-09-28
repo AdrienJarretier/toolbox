@@ -2,29 +2,39 @@ import matplotlib.pyplot as plt
 from Point import Point
 
 
-def plotPoints(points: list[Point], radius=1.0, color=[[0, 0, 0, 1/5]], backgroundImage=None):
+class Plot:
 
-    transposedPoints = list(map(list, zip(*points)))
+    def __init__(self):
+        pass
 
-    fig = plt.figure(1, [7.2, 7.2])
+    def plotPoints(self, points: list[Point], radius=1.0, color=[[0, 0, 0, 1/5]], backgroundImage=None):
 
-    if backgroundImage is not None:
-        w = backgroundImage.shape[0]
-        h = backgroundImage.shape[1]
-        plt.imshow(backgroundImage, extent=[-w/2, w/2, h/2, -h/2])
+        transposedPoints = list(map(list, zip(*points)))
 
-    circle = plt.Circle((0, 0), radius, fill=False, color='red')
-    ax = fig.gca()
-    ax.add_patch(circle)
-    plt.scatter(transposedPoints[0], transposedPoints[1], c=color)
+        fig = plt.figure(1, [7.2, 7.2])
 
-    for point in points:
-        plt.annotate(point.label,  # this is the text
-                     point._data, color='white')
+        if backgroundImage is not None:
+            w = backgroundImage.shape[0]
+            h = backgroundImage.shape[1]
+            plt.imshow(backgroundImage, extent=[-w/2, w/2, h/2, -h/2])
 
-    plt.plot([0, points[0].x],[0, points[0].y])
-    for i in range(len(points)-1):
-        plt.plot([points[i].x, points[i+1].x],[points[i].y, points[i+1].y])
-    plt.plot([points[-1].x, 0],[points[-1].y, 0])
+        circle = plt.Circle((0, 0), radius, fill=False, color='red')
+        ax = fig.gca()
+        ax.add_patch(circle)
+        plt.scatter(transposedPoints[0], transposedPoints[1], c=color)
 
-    plt.show()
+        for point in points:
+            plt.annotate(point.label,  # this is the text
+                         point._data, color='white')
+
+    def linkPoints(self, points):
+
+        plt.plot([0, points[0].x], [0, points[0].y])
+        for i in range(len(points)-1):
+            plt.plot([points[i].x, points[i+1].x],
+                     [points[i].y, points[i+1].y])
+        plt.plot([points[-1].x, 0], [points[-1].y, 0])
+
+    def show(self):
+
+        plt.show()
