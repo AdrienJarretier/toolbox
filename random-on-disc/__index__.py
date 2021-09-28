@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 1
+POINTS_COUNT = 7
 
 points = []
 
@@ -45,14 +45,14 @@ def greedySolve(points):
     print('plotting points')
     print('greedy path :', [p.label for p in orderedPoints])
 
-    return orderedPoints
+    return orderedPoints + [points[0]]
 
 
 def plotAll(points):
     plot = Plot()
     plot.plotPoints(points, RADIUS, color=[
         [1, 0, 0, 1/2]], backgroundImage=img)
-    plot.linkPoints(points + [points[0]])
+    plot.linkPoints(points)
     plot.show()
 
 
@@ -61,4 +61,4 @@ solvedPoints = bnbSolve(points)
 print('route length:', routeLength(solvedPoints))
 
 labelAddOrder(solvedPoints)
-# plotAll(solvedPoints)
+plotAll(solvedPoints)
