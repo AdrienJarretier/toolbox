@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 8
+POINTS_COUNT = 2
 
 points = []
 
@@ -27,9 +27,9 @@ for i in range(POINTS_COUNT):
 
 
 def labelAddOrder(points):
-    for i in range(len(points)):
+    for i in range(1, len(points)-1):
         point = points[i]
-        point.setLabel(point.label + str(i+1))
+        point.setLabel(point.label + str(i))
 
 
 def greedySolve(points):
