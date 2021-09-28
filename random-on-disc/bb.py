@@ -3,7 +3,7 @@ from Point import Point
 import pybnb
 # define a branch-and-bound problem
 
-from tsp import routeLength, tspNearestNeighbour
+from tsp import orderPoints, routeLength, tspNearestNeighbour
 
 
 class MyProblem(pybnb.Problem):
@@ -23,7 +23,8 @@ class MyProblem(pybnb.Problem):
             return routeLength(self.path)
 
     def bound(self):
-        # print('-------------------------')
+        # print('----------- bound --------------')
+        # print(self.path)
         # print('bound self.path')
         # print(self.path)
         # print('-------------------------')
@@ -31,16 +32,11 @@ class MyProblem(pybnb.Problem):
             point for point in self.points if point not in self.path]
         orderedPointsIndices = tspNearestNeighbour(pointsNotInPath)
 
-        orderedPoints = []
-        for i in range(len(orderedPointsIndices)):
-            orderedPointIndex = orderedPointsIndices[i]
-            print('#########################')
-            print(orderedPointIndex-1)
-            print(pointsNotInPath)
-            point = pointsNotInPath[orderedPointIndex-1]
-            orderedPoints.append(point)
+        orderedPoints = orderPoints(orderedPointsIndices, pointsNotInPath)
 
         length = routeLength(self.path + orderedPoints)
+        # print([p.label for p in self.path + orderedPoints])
+        # print(length)
         return length
 
     def save_state(self, node):
@@ -67,7 +63,7 @@ class MyProblem(pybnb.Problem):
                 child.state = (childPath, self.points.copy())
                 # print('*****************************************')
                 # print('branch, childPath')
-                print([p.label for p in childPath])
+                # print([p.label for p in childPath])
                 # print('*****************************************')
                 yield child
 

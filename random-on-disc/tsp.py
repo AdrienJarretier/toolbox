@@ -64,3 +64,14 @@ def routeLength(points):
     # length += points[-1].distance(diskCenter)
 
     return length
+
+
+def orderPoints(orderedIndices, points):
+    orderedPoints = []
+    for i in range(len(orderedIndices)):
+        orderedPointIndex = orderedIndices[i]
+        point = points[orderedPointIndex]
+        orderedPoints.append(point)
+
+    return orderedPoints
+

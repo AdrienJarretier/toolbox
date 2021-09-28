@@ -1,7 +1,7 @@
 
 from bb import bnbSolve
 from randomOnDisk import randomPoint
-from tsp import tspNearestNeighbour, routeLength
+from tsp import orderPoints, tspNearestNeighbour, routeLength
 import matplotlib.image as mpimg
 import string
 
@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 3
+POINTS_COUNT = 5
 
 points = []
 
@@ -40,12 +40,7 @@ def greedySolve(points):
     print(orderedPointsIndices)
     print(points)
 
-    orderedPoints = []
-    for i in range(len(orderedPointsIndices)):
-        orderedPointIndex = orderedPointsIndices[i]
-        point = points[orderedPointIndex]
-        # point.setLabel('')
-        orderedPoints.append(point)
+    orderedPoints = orderPoints(orderedPointsIndices, points)
 
     print('plotting points')
     print('greedy path :', [p.label for p in orderedPoints])
@@ -53,11 +48,11 @@ def greedySolve(points):
     return orderedPoints
 
 
-def plotAll():
+def plotAll(points):
     plot = Plot()
-    plot.plotPoints(solvedPoints, RADIUS, color=[
+    plot.plotPoints(points, RADIUS, color=[
         [1, 0, 0, 1/2]], backgroundImage=img)
-    plot.linkPoints(solvedPoints + [solvedPoints[0]])
+    plot.linkPoints(points + [points[0]])
     plot.show()
 
 
@@ -65,5 +60,7 @@ def plotAll():
 solvedPoints = bnbSolve(points)
 print('route length:', routeLength(solvedPoints))
 
+labelAddOrder(solvedPoints)
+plotAll(solvedPoints)
 
 labelAddOrder(solvedPoints)
