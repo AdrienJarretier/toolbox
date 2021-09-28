@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 5
+POINTS_COUNT = 1
 
 points = []
 
@@ -61,6 +61,5 @@ solvedPoints = bnbSolve(points)
 print('route length:', routeLength(solvedPoints))
 
 labelAddOrder(solvedPoints)
-plotAll(solvedPoints)
+# plotAll(solvedPoints)
 
-labelAddOrder(solvedPoints)

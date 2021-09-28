@@ -30,13 +30,14 @@ class MyProblem(pybnb.Problem):
         # print('-------------------------')
         pointsNotInPath = [self.orig] + [
             point for point in self.points if point not in self.path]
+
         orderedPointsIndices = tspNearestNeighbour(pointsNotInPath)
 
         orderedPoints = orderPoints(orderedPointsIndices, pointsNotInPath)
 
         length = routeLength(self.path + orderedPoints)
-        # print([p.label for p in self.path + orderedPoints])
-        # print(length)
+        print([p.label for p in self.path], [p.label for p in orderedPoints])
+        print(length)
         return length
 
     def save_state(self, node):
@@ -69,6 +70,8 @@ class MyProblem(pybnb.Problem):
 
 
 def bnbSolve(points):
+    print('============ bnbSolve ============')
+    print([p.label for p in points])
     result = pybnb.solve(MyProblem(points), comm=None)
     print('best_node')
     print([p.label for p in result.best_node.state[0]])
