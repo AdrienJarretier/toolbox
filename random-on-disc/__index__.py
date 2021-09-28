@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 7
+POINTS_COUNT = 8
 
 points = []
 
