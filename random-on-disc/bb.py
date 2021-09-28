@@ -9,15 +9,15 @@ from tsp import routeLength, tspNearestNeighbour
 class MyProblem(pybnb.Problem):
 
     def __init__(self, points):
+        self.orig = Point(0, 0)
         self.points = points.copy()
-        print('WARNING REMOVE COPY HERE')
-        self.path = []
+        self.path = [self.orig]
 
     def sense(self):
         return pybnb.minimize
 
     def objective(self):
-        if len(self.path) < len(self.points):
+        if len(self.path)-1 < len(self.points):
             return self.infeasible_objective()
         else:
             return routeLength(self.path)
@@ -27,13 +27,16 @@ class MyProblem(pybnb.Problem):
         # print('bound self.path')
         # print(self.path)
         # print('-------------------------')
-        pointsNotInPath = [
+        pointsNotInPath = [self.orig] + [
             point for point in self.points if point not in self.path]
         orderedPointsIndices = tspNearestNeighbour(pointsNotInPath)
 
         orderedPoints = []
         for i in range(len(orderedPointsIndices)):
             orderedPointIndex = orderedPointsIndices[i]
+            print('#########################')
+            print(orderedPointIndex-1)
+            print(pointsNotInPath)
             point = pointsNotInPath[orderedPointIndex-1]
             orderedPoints.append(point)
 

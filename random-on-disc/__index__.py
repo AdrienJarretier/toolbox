@@ -13,7 +13,7 @@ img = mpimg.imread('test_image.jpg')
 
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 5
+POINTS_COUNT = 3
 
 points = []
 
@@ -26,8 +26,14 @@ for i in range(POINTS_COUNT):
     points.append(p)
 
 
+def labelAddOrder(points):
+    for i in range(len(points)):
+        point = points[i]
+        point.setLabel(point.label + str(i+1))
+
+
 def greedySolve(points):
-    points = [Point(0, 0)] + points
+    points = points
     print('solving tsp...')
     orderedPointsIndices = tspNearestNeighbour(points)
     print('tsp solved')
@@ -39,7 +45,6 @@ def greedySolve(points):
         orderedPointIndex = orderedPointsIndices[i]
         point = points[orderedPointIndex]
         # point.setLabel('')
-        point.setLabel(point.label + str(i+1))
         orderedPoints.append(point)
 
     print('plotting points')
@@ -48,15 +53,17 @@ def greedySolve(points):
     return orderedPoints
 
 
-solvedPoints = greedySolve(points)
+def plotAll():
+    plot = Plot()
+    plot.plotPoints(solvedPoints, RADIUS, color=[
+        [1, 0, 0, 1/2]], backgroundImage=img)
+    plot.linkPoints(solvedPoints + [solvedPoints[0]])
+    plot.show()
+
+
+# solvedPoints = greedySolve([Point(0, 0)]+points)
+solvedPoints = bnbSolve(points)
 print('route length:', routeLength(solvedPoints))
 
 
-plot = Plot()
-
-plot.plotPoints(solvedPoints, RADIUS, color=[
-    [1, 0, 0, 1/2]], backgroundImage=img)
-
-plot.linkPoints(solvedPoints)
-
-plot.show()
+labelAddOrder(solvedPoints)
