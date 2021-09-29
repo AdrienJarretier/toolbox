@@ -59,9 +59,6 @@ def greedySolve(points):
 
     orderedPoints = orderPoints(orderedPointsIndices, points)
 
-    print('plotting points')
-    print('greedy path :', [p.getLabel() for p in orderedPoints])
-
     return orderedPoints + [points[0]]
 
 
@@ -75,6 +72,7 @@ def plotAll(points):
 
 # solvedPoints = greedySolve([Point(0, 0)]+points)
 solvedPoints = bnbSolve(points)
+print('path :', [p.getLabel() for p in solvedPoints])
 print('route length:', routeLength(solvedPoints))
 
 labelAddOrder(solvedPoints)

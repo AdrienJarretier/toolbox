@@ -71,7 +71,5 @@ def bnbSolve(points):
     print('============ bnbSolve ============')
     print([p.label for p in points])
     result = pybnb.solve(MyProblem(points), comm=None)
-    print('best_node')
-    print([p.label for p in result.best_node.state[0]])
 
     return result.best_node.state[0]
