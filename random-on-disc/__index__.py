@@ -19,12 +19,16 @@ img = mpimg.imread('test_image.jpg')
 
 DISTRIB_RAIDUS_CAP = 0.3
 
+RATIO_DISTRIB_AREA_TOTAL_AREA = 1/3
 
-RADIUS = max(img.shape[0], img.shape[1])/2
+TOTAL_CIRCLE_RADIUS = max(img.shape[0], img.shape[1])/2
 
 POINTS_COUNT = 7
 
 points = []
+
+
+RADIUS = TOTAL_CIRCLE_RADIUS * (RATIO_DISTRIB_AREA_TOTAL_AREA**0.5)
 
 
 print('picking random points...')
