@@ -3,7 +3,7 @@ from Point import Point
 import pybnb
 # define a branch-and-bound problem
 
-from tsp import orderPoints, routeLength, tspNearestNeighbour
+from tsp import orderPoints, tspNearestNeighbour
 
 
 class MyProblem(pybnb.Problem):
@@ -12,6 +12,7 @@ class MyProblem(pybnb.Problem):
         self.orig = Point(0, 0)
         self.points = points.copy()
         self.path = [self.orig]
+        self.routeLength = 0
 
     def sense(self):
         return pybnb.minimize
@@ -20,7 +21,7 @@ class MyProblem(pybnb.Problem):
         if len(self.path) <= 1 or self.path[0] != self.path[-1]:
             return self.infeasible_objective()
         else:
-            return routeLength(self.path)
+            return self.routeLength
 
     # def bound(self):
     #     print([p.label for p in self.path], [p.label for p in self.points])
@@ -40,10 +41,10 @@ class MyProblem(pybnb.Problem):
         return self.unbounded_objective()
 
     def save_state(self, node):
-        node.state = (self.path.copy(), self.points.copy())
+        node.state = (self.path.copy(), self.points.copy(), self.routeLength)
 
     def load_state(self, node):
-        (self.path, self.points) = node.state
+        (self.path, self.points, self.routeLength) = node.state
 
     def branch(self):
 
@@ -53,8 +54,9 @@ class MyProblem(pybnb.Problem):
             child = pybnb.Node()
             childPath = self.path.copy()
             childPath.append(nextPoint)
-            # print([p.label for p in childPath])
-            child.state = (childPath, remainingPoints)
+            childPathLength = self.routeLength + \
+                childPath[-2].distance(nextPoint)
+            child.state = (childPath, remainingPoints, childPathLength)
             return child
 
         if len(self.points) == 0 and self.path[0] != self.path[-1]:
