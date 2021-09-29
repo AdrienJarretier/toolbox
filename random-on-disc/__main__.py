@@ -8,8 +8,8 @@ import matplotlib.image as mpimg
 import string
 import random
 
-SEED = random.randrange(2**64)
-# SEED = 9695349962937902509
+# SEED = random.randrange(2**64)
+SEED = 9695349962937902509
 print('seed :', SEED)
 random.seed(SEED)
 
@@ -27,7 +27,7 @@ if img is not None:
 else:
     TOTAL_CIRCLE_RADIUS = 400
 
-POINTS_COUNT = 10
+POINTS_COUNT = 8
 
 points = []
 
@@ -46,7 +46,7 @@ for i in range(POINTS_COUNT):
 def labelAddOrder(points):
     for i in range(1, len(points)-1):
         point = points[i]
-        point.setLabel(point.label + str(i))
+        point.setLabel(point.getLabel() + str(i), 'black')
 
 
 def greedySolve(points):
@@ -60,7 +60,7 @@ def greedySolve(points):
     orderedPoints = orderPoints(orderedPointsIndices, points)
 
     print('plotting points')
-    print('greedy path :', [p.label for p in orderedPoints])
+    print('greedy path :', [p.getLabel() for p in orderedPoints])
 
     return orderedPoints + [points[0]]
 

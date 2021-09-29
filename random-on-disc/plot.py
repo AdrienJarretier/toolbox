@@ -24,8 +24,8 @@ class Plot:
         plt.scatter(transposedPoints[0], transposedPoints[1], c=color)
 
         for point in points:
-            plt.annotate(point.label,  # this is the text
-                         point._data, color='white')
+            plt.annotate(point.getLabel(),  # this is the text
+                         point._data, color=point.getLabelColor())
 
     def linkPoints(self, points):
 
