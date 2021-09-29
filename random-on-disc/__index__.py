@@ -1,19 +1,28 @@
 
+from plot import Plot
+from Point import Point
 from bb import bnbSolve
 from randomOnDisk import randomPoint
 from tsp import orderPoints, tspNearestNeighbour, routeLength
 import matplotlib.image as mpimg
 import string
+import random
 
-from Point import Point
-from plot import Plot
+SEED = random.randrange(2**64)
+# SEED = 9695349962937902509
+print('seed :', SEED)
+random.seed(SEED)
+
 
 img = mpimg.imread('test_image.jpg')
 
 
+DISTRIB_RAIDUS_CAP = 0.3
+
+
 RADIUS = max(img.shape[0], img.shape[1])/2
 
-POINTS_COUNT = 2
+POINTS_COUNT = 7
 
 points = []
 

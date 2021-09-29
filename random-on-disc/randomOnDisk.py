@@ -2,12 +2,6 @@
 import math
 import random
 
-# SEED = random.randrange(2**64)
-SEED = 9695349962937902509
-print('seed :', SEED)
-random.seed(SEED)
-
-
 def randomPoint(diskRadius):
 
     pickedAngle = random.uniform(0, 2*math.pi)
