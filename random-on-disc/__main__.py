@@ -14,16 +14,20 @@ print('seed :', SEED)
 random.seed(SEED)
 
 
-img = mpimg.imread('test_image.jpg')
+# img = mpimg.imread('test_image.jpg')
+img = None
 
 
 DISTRIB_RAIDUS_CAP = 0.3
 
-RATIO_DISTRIB_AREA_TOTAL_AREA = 1/3
+RATIO_DISTRIB_AREA_TOTAL_AREA = 1/7
 
-TOTAL_CIRCLE_RADIUS = max(img.shape[0], img.shape[1])/2
+if img is not None:
+    TOTAL_CIRCLE_RADIUS = max(img.shape[0], img.shape[1])/2
+else:
+    TOTAL_CIRCLE_RADIUS = 400
 
-POINTS_COUNT = 7
+POINTS_COUNT = 10
 
 points = []
 
