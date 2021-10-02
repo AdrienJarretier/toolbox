@@ -6,7 +6,6 @@ window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default
                    grab_anywhere=False, use_custom_titlebar=True, titlebar_icon="", enable_close_attempted_event=True)
 
 window.finalize()
-window.load_from_disk('savedValues.pck')
 
 # Display and interact with the Window using an Event Loop
 while True:
