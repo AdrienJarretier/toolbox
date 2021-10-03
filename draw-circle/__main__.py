@@ -22,12 +22,12 @@ def drawGrid(cellSize):
     lines = int((TOP_RIGHT[1]-BOTTOM_LEFT[1])/cellHeight)
     cols = int((TOP_RIGHT[0]-BOTTOM_LEFT[0])/cellWidth)
 
-    for i in range(2):
+    for i in range(lines):
         y = i*cellHeight+BOTTOM_LEFT[1]
         print('y :', y)
-        graphicalArea.draw_line((BOTTOM_LEFT[0], y), (TOP_RIGHT[0], y))
+        graphicalArea.draw_line((BOTTOM_LEFT[0], y+1), (TOP_RIGHT[0], y+1))
 
-    for j in range(2):
+    for j in range(cols):
         x = j*cellWidth+BOTTOM_LEFT[0]
         print('x :', x)
         graphicalArea.draw_line((x, TOP_RIGHT[1]), (x, BOTTOM_LEFT[1]))
