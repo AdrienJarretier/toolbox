@@ -19,18 +19,24 @@ window.finalize()
 def drawGrid(cellSize):
     cellWidth = cellSize[0]
     cellHeight = cellSize[1]
-    lines = int((TOP_RIGHT[1]-BOTTOM_LEFT[1])/cellHeight)
-    cols = int((TOP_RIGHT[0]-BOTTOM_LEFT[0])/cellWidth)
+    lines = int((TOP_RIGHT[1]-BOTTOM_LEFT[1])/cellHeight)+1
+    cols = int((TOP_RIGHT[0]-BOTTOM_LEFT[0])/cellWidth)+1
 
-    for i in range(lines):
+    graphicalArea.draw_line(
+        (BOTTOM_LEFT[0], BOTTOM_LEFT[1]+1),
+        (TOP_RIGHT[0], BOTTOM_LEFT[1]+1))
+    for i in range(1, lines):
         y = i*cellHeight+BOTTOM_LEFT[1]
         print('y :', y)
-        graphicalArea.draw_line((BOTTOM_LEFT[0], y+1), (TOP_RIGHT[0], y+1))
+        graphicalArea.draw_line((BOTTOM_LEFT[0], y), (TOP_RIGHT[0], y))
 
-    for j in range(cols):
+    for j in range(cols-1):
         x = j*cellWidth+BOTTOM_LEFT[0]
         print('x :', x)
         graphicalArea.draw_line((x, TOP_RIGHT[1]), (x, BOTTOM_LEFT[1]))
+    graphicalArea.draw_line(
+        (TOP_RIGHT[0]-1, TOP_RIGHT[1]),
+        (TOP_RIGHT[0]-1, BOTTOM_LEFT[1]))
 
 
 drawGrid((20, 20))
