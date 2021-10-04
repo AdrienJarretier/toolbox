@@ -4,6 +4,8 @@ CANVAS_SIZE = (200, 200)
 BOTTOM_LEFT = (-CANVAS_SIZE[0]/2, -CANVAS_SIZE[1]/2)
 TOP_RIGHT = (CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2)
 
+DEFAULT_GRID_RESOLUTION = 1
+
 print('CANVAS_SIZE :', CANVAS_SIZE)
 print('BOTTOM_LEFT :', BOTTOM_LEFT)
 print('TOP_RIGHT :', TOP_RIGHT)
@@ -36,10 +38,14 @@ def drawGrid(cellSize):
         (x, BOTTOM_LEFT[1]))
 
 
-gridResolution = 1
+###################### gridResolution ######################
+gridResolutionInput = sg.Input(
+    1, (3, None), key='-GRID_RESOLUTION-')
+###################### -------------- ######################
+
 
 layout = [[graphicalArea, sg.Text(
-    'grid resolution :'), sg.Input(gridResolution, (3, None))]]
+    'grid resolution :'), gridResolutionInput]]
 
 window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default", 14), no_titlebar=False,
                    grab_anywhere=False, use_custom_titlebar=True, titlebar_icon="", enable_close_attempted_event=True,
@@ -48,7 +54,8 @@ window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default
 window.finalize()
 
 
-gridCellsSize = (CANVAS_SIZE[0]/gridResolution, CANVAS_SIZE[1]/gridResolution)
+gridCellsSize = (CANVAS_SIZE[0]/DEFAULT_GRID_RESOLUTION,
+                 CANVAS_SIZE[1]/DEFAULT_GRID_RESOLUTION)
 print('CELLS_SIZE :', gridCellsSize)
 drawGrid(gridCellsSize)
 
@@ -61,17 +68,24 @@ print('circle id :', circleId)
 while True:
     event, values = window.read()
 
-    # print(event)
+    # print(values)
     # print(type(event))
 
-    if event == 'Up:38':
-        gridResolution += 1
-    if event == 'Down:40' and gridResolution > 1:
-        gridResolution -= 1
+    ###################### get inputs values ######################
+
+    gridResolution = int(values['-GRID_RESOLUTION-'])
+
+    ###################### ----------------- ######################
+
+    if window.find_element_with_focus() == gridResolutionInput:
+        if event == 'Up:38':
+            gridResolution += 1
+        if event == 'Down:40' and gridResolution > 1:
+            gridResolution -= 1
+        gridResolutionInput.update(gridResolution)
 
     print(gridResolution)
 
-    # print(values)
     # See if user wants to quit or window was closed
     if event == sg.WINDOW_CLOSE_ATTEMPTED_EVENT or event == 'Quit':
         break
