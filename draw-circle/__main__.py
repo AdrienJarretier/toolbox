@@ -10,15 +10,6 @@ print('TOP_RIGHT :', TOP_RIGHT)
 
 graphicalArea = sg.Graph(CANVAS_SIZE, BOTTOM_LEFT, TOP_RIGHT)
 
-layout = [[
-    graphicalArea
-]]
-
-window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default", 14), no_titlebar=False,
-                   grab_anywhere=False, use_custom_titlebar=True, titlebar_icon="", enable_close_attempted_event=True)
-
-window.finalize()
-
 
 def drawGrid(cellSize):
     cellWidth = cellSize[0]
@@ -45,9 +36,21 @@ def drawGrid(cellSize):
         (x, BOTTOM_LEFT[1]))
 
 
-CELLS_SIZE = (40, 40)
-print('CELLS_SIZE :', CELLS_SIZE)
-drawGrid(CELLS_SIZE)
+gridResolution = 1
+
+layout = [[graphicalArea, sg.Text(
+    'grid resolution :'), sg.Input(gridResolution, (3, None))]]
+
+window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default", 14), no_titlebar=False,
+                   grab_anywhere=False, use_custom_titlebar=True, titlebar_icon="", enable_close_attempted_event=True,
+                   return_keyboard_events=True)
+
+window.finalize()
+
+
+gridCellsSize = (CANVAS_SIZE[0]/gridResolution, CANVAS_SIZE[1]/gridResolution)
+print('CELLS_SIZE :', gridCellsSize)
+drawGrid(gridCellsSize)
 
 circleId = graphicalArea.draw_circle(
     (0, 0), 50, line_color='black', line_width=4)
@@ -58,6 +61,17 @@ print('circle id :', circleId)
 while True:
     event, values = window.read()
 
+    # print(event)
+    # print(type(event))
+
+    if event == 'Up:38':
+        gridResolution += 1
+    if event == 'Down:40' and gridResolution > 1:
+        gridResolution -= 1
+
+    print(gridResolution)
+
+    # print(values)
     # See if user wants to quit or window was closed
     if event == sg.WINDOW_CLOSE_ATTEMPTED_EVENT or event == 'Quit':
         break
