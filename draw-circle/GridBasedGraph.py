@@ -1,6 +1,6 @@
 import random
 from PySimpleGUI import Graph
-
+from PIL import ImageGrab
 
 class GridBasedGraph(Graph):
 
@@ -66,6 +66,17 @@ class GridBasedGraph(Graph):
                 return int(x) - roundedDecimal
 
         return tuple([roundToHalf(c) for c in point])
+    
+    def saveToFile(self, filename):
+        """
+        Saves any element as an image file.  Element needs to have an underlyiong Widget available (almost if not all of them do)
+        :param element: The element to save
+        :param filename: The filename to save to. The extension of the filename determines the format (jpg, png, gif, ?)
+        """
+        widget = self.Widget
+        box = (widget.winfo_rootx(), widget.winfo_rooty(), widget.winfo_rootx() + widget.winfo_width(), widget.winfo_rooty() + widget.winfo_height())
+        grab = ImageGrab.grab(bbox=box)
+        grab.save(filename)
 
 
 # testGraph = GridBasedGraph((5, 5), 30)
