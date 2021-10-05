@@ -1,15 +1,14 @@
 import PySimpleGUI as sg
 from GrisBasedGraph import GrisBasedGraph
 
-graphicalArea = GrisBasedGraph((3, 3), (40, 40))
+graphicalArea = GrisBasedGraph((6, 6), 40)
 
 ###################### gridResolution ######################
 gridResolutionInput = sg.Input(
     1, (3, None), key='-GRID_RESOLUTION-')
 ###################### -------------- ######################
 
-layout = [[graphicalArea, sg.Text(
-    'grid resolution :'), gridResolutionInput]]
+layout = [[graphicalArea, sg.Text('grid resolution :'), gridResolutionInput]]
 
 window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default", 14), no_titlebar=False,
                    grab_anywhere=False, use_custom_titlebar=True, titlebar_icon="", enable_close_attempted_event=True,
@@ -19,8 +18,8 @@ window.finalize()
 
 graphicalArea.drawGrid()
 
-# circleId = graphicalArea.draw_circle(
-#     (0, 0), 50, line_color='black', line_width=4)
+circleId = graphicalArea.draw_circle(
+    (-1, 0), 2, line_color='black', line_width=4)
 
 # print('circle id :', circleId)
 
