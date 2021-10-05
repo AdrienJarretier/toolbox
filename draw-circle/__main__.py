@@ -33,7 +33,8 @@ while True:
     if event == '-GRAPH_AREA-':
         print('drawing circle at', values['-GRAPH_AREA-'])
         graphicalArea.draw_circle(
-            graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-']),
+            graphicalArea.snapToGrid(
+                graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-'])),
             2, line_color='black', line_width=4)
 
     ###################### get inputs values ######################

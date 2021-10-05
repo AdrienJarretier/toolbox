@@ -1,3 +1,4 @@
+import random
 from PySimpleGUI import Graph
 
 
@@ -49,12 +50,29 @@ class GridBasedGraph(Graph):
     def mapCoordsToPixels(self, point):
         return tuple([c * self.cellSize for c in point])
 
-    # # round point components so that it snaps to the grid
-    # def snapeToGrid(self, point):
+    # round point components so that it snaps to the grid
+    def snapToGrid(self, point):
+        def roundToHalf(x):
+            roundedDecimal = 0
+            decimal = abs(x) % 1
+            if 0.25 <= decimal and decimal < 0.75:
+                roundedDecimal = 0.5
+            elif decimal >= 0.75:
+                roundedDecimal = 1
 
+            if x >= 0:
+                return int(x) + roundedDecimal
+            else:
+                return int(x) - roundedDecimal
+
+        return tuple([roundToHalf(c) for c in point])
 
 
 # testGraph = GridBasedGraph((5, 5), 30)
+
+# for _ in range(5):
+#     point = (random.uniform(-1, 1),random.uniform(-1, 1))
+#     print(point, testGraph.snapToGrid(point))
 
 # print(testGraph.mapPixelToCoords((30, 3)))
 # print(testGraph.mapCoordsToPixels((1, 0.1)))
