@@ -1,15 +1,16 @@
 from PySimpleGUI import Graph
 
 
-class GrisBasedGraph(Graph):
+class GridBasedGraph(Graph):
 
-    def __init__(self, gridSize, cellSize):
+    def __init__(self, gridSize, cellSize, key=None):
         self.gridSize = gridSize
         self.cellSize = cellSize
         CANVAS_SIZE = self.getTotalSize()
         self.BOTTOM_LEFT = (-CANVAS_SIZE[0]/2, -CANVAS_SIZE[1]/2)
         self.TOP_RIGHT = (CANVAS_SIZE[0]/2, CANVAS_SIZE[1]/2)
-        super().__init__(CANVAS_SIZE, self.BOTTOM_LEFT, self.TOP_RIGHT)
+        super().__init__(CANVAS_SIZE, self.BOTTOM_LEFT,
+                         self.TOP_RIGHT, enable_events=True, key=key)
 
     def getTotalSize(self):
         return (self.gridSize[0]*self.cellSize, self.gridSize[1]*self.cellSize)
@@ -41,3 +42,19 @@ class GrisBasedGraph(Graph):
             center_location[0]*self.cellSize, center_location[1]*self.cellSize)
         super().draw_circle(center_location, radius *
                             self.cellSize, fill_color, line_color, line_width)
+
+    def mapPixelToCoords(self, point):
+        return tuple([c / self.cellSize for c in point])
+
+    def mapCoordsToPixels(self, point):
+        return tuple([c * self.cellSize for c in point])
+
+    # # round point components so that it snaps to the grid
+    # def snapeToGrid(self, point):
+
+
+
+# testGraph = GridBasedGraph((5, 5), 30)
+
+# print(testGraph.mapPixelToCoords((30, 3)))
+# print(testGraph.mapCoordsToPixels((1, 0.1)))

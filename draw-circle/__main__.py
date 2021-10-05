@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
-from GrisBasedGraph import GrisBasedGraph
+from GridBasedGraph import GridBasedGraph
 
-graphicalArea = GrisBasedGraph((6, 6), 40)
+graphicalArea = GridBasedGraph((32, 18), 20, key='-GRAPH_AREA-')
 
 ###################### gridResolution ######################
 gridResolutionInput = sg.Input(
@@ -27,12 +27,21 @@ circleId = graphicalArea.draw_circle(
 while True:
     event, values = window.read()
 
-    # print(values)
-    # print(type(event))
+    print(values)
+    print('event :', event)
+
+    if event == '-GRAPH_AREA-':
+        print('drawing circle at', values['-GRAPH_AREA-'])
+        graphicalArea.draw_circle(
+            graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-']),
+            2, line_color='black', line_width=4)
 
     ###################### get inputs values ######################
 
-    gridResolution = int(values['-GRID_RESOLUTION-'])
+    try:
+        gridResolution = int(values['-GRID_RESOLUTION-'])
+    except ValueError:
+        gridResolution = 0
 
     ###################### ----------------- ######################
 
