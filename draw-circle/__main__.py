@@ -3,6 +3,7 @@ from GridBasedGraph import GridBasedGraph
 
 graphicalArea = GridBasedGraph((32, 18), 20, key='-GRAPH_AREA-')
 
+
 ###################### gridResolution ######################
 gridResolutionInput = sg.Input(
     1, (3, None), key='-GRID_RESOLUTION-')
@@ -16,26 +17,54 @@ window = sg.Window('Draw Circle', layout, element_padding=(8, 8), font=("default
 
 window.finalize()
 
-graphicalArea.drawGrid()
 
-circleId = graphicalArea.draw_circle(
-    (-1, 0), 2, line_color='black', line_width=4)
+graphicalArea.bind("<Motion>", 'mouseMove')
+
+graphicalArea.drawGrid()
 
 # print('circle id :', circleId)
 
 # Display and interact with the Window using an Event Loop
+snappedCursor = None
+tmpCircleAtMouse = None
 while True:
     event, values = window.read()
 
-    print(values)
-    print('event :', event)
+    # print(values)
+    # print('event :', event)
 
     if event == '-GRAPH_AREA-':
         print('drawing circle at', values['-GRAPH_AREA-'])
         graphicalArea.draw_circle(
             graphicalArea.snapToGrid(
                 graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-'])),
-            2, line_color='black', line_width=4)
+            2, line_color='black', line_width=3)
+
+    if event == '-GRAPH_AREA-mouseMove':
+        # tk_canvas
+        polygonCenter = graphicalArea.mapCoordsToPixels(
+            graphicalArea.snapToGrid(
+            graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-']))
+        )
+        crossSize = 20
+        crossPoints = [
+            (polygonCenter[0]-crossSize/2, polygonCenter[1]),
+            polygonCenter,
+            (polygonCenter[0]+crossSize/2, polygonCenter[1]),
+            polygonCenter,
+            (polygonCenter[0], polygonCenter[1]-crossSize/2),
+            polygonCenter,
+            (polygonCenter[0], polygonCenter[1]+crossSize/2),
+            polygonCenter
+        ]
+        graphicalArea.delete_figure(snappedCursor)
+        snappedCursor = graphicalArea.draw_polygon(
+            crossPoints, line_color='black', line_width=2)
+        graphicalArea.delete_figure(tmpCircleAtMouse)
+        tmpCircleAtMouse = graphicalArea.draw_circle(
+            graphicalArea.snapToGrid(
+                graphicalArea.mapPixelToCoords(values['-GRAPH_AREA-'])),
+            2, line_color='black', line_width=1)
 
     ###################### get inputs values ######################
 
@@ -53,7 +82,7 @@ while True:
             gridResolution -= 1
         gridResolutionInput.update(gridResolution)
 
-    print(gridResolution)
+    # print(gridResolution)
 
     # See if user wants to quit or window was closed
     if event == sg.WINDOW_CLOSE_ATTEMPTED_EVENT or event == 'Quit':

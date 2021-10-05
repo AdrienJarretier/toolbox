@@ -41,7 +41,7 @@ class GridBasedGraph(Graph):
     def draw_circle(self, center_location, radius, fill_color=None, line_color='black', line_width=1):
         center_location = (
             center_location[0]*self.cellSize, center_location[1]*self.cellSize)
-        super().draw_circle(center_location, radius *
+        return super().draw_circle(center_location, radius *
                             self.cellSize, fill_color, line_color, line_width)
 
     def mapPixelToCoords(self, point):
