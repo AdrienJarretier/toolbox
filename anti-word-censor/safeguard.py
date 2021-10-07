@@ -1,3 +1,4 @@
+import itertools
 import os
 import re
 import string
@@ -44,17 +45,27 @@ funnyStrings = [
 ]
 funnyStringsWeights = [1]*(len(funnyStrings)+1)
 
-print(funnyStringsWeights)
 
+def replaceWithFunnyString(word):
 
-def safeguardWord2(word):
+    cumulativeWeigths = list(itertools.accumulate(funnyStringsWeights))
 
-    return random.choice(funnyStrings
-                         + [
-                             '♥' +
-                             '-'.join(['heart' for _ in range(len(word)-2)])+'♥'
-                         ]
-                         ).replace(' ', '-')
+    pick = random.randint(1, cumulativeWeigths[-1])
+    pickedIndex = 0
+    while cumulativeWeigths[pickedIndex] < pick:
+        pickedIndex += 1
+
+    for i in range(len(funnyStringsWeights)):
+        funnyStringsWeights[i] += 2
+
+    funnyStringsWeights[pickedIndex] = 1
+
+    return (funnyStrings
+            + [
+                '♥' +
+                '-'.join(['heart']*(len(word)-2))+'♥'
+            ]
+            )[pickedIndex].replace(' ', '-')
 
 
 def safeguardFile(filename):
@@ -76,7 +87,7 @@ def safeguardFile(filename):
 
                     word = words[i]
                     if word in CENSOR_LIST:
-                        words[i] = safeguardWord2(words[i])
+                        words[i] = replaceWithFunnyString(words[i])
 
                 line = ''.join(words)
 
