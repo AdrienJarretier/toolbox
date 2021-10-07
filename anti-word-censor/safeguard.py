@@ -33,6 +33,20 @@ def safeguardWord(word):
     return outputWord
 
 
+def safeguardWord2(word):
+
+    return random.choice([
+        '♥censored-for-fragile-spirits-easily-offended♥',
+        '♥censored-for-love♥',
+        '♥this-is-not-a-bypass-of-the-censorship-filter♥',
+        '♥censored-because-depth-of-vocabulary-is-overrated♥',
+        '♥'+'-'.join(['heart' for _ in range(len(word)-2)])+'♥',
+        '♥censored-because-I-don\'t-want-to-get-spanked♥',
+        '♥I hope you do not consider "spanked" a profanity word♥',
+        '♥hearts are peace, hearts are love♥',
+    ]).replace(' ', '-')
+
+
 def safeguardFile(filename):
 
     inFilePath = os.path.join(INPUT_DIR, filename)
@@ -43,7 +57,7 @@ def safeguardFile(filename):
 
     with open(inFilePath) as inFile:
 
-        with open(outFilePath, 'w') as outFile:
+        with open(outFilePath, 'w', encoding="utf-8") as outFile:
 
             for line in inFile:
 
@@ -52,7 +66,7 @@ def safeguardFile(filename):
 
                     word = words[i]
                     if word in CENSOR_LIST:
-                        words[i] = safeguardWord(words[i])
+                        words[i] = safeguardWord2(words[i])
 
                 line = ''.join(words)
 
