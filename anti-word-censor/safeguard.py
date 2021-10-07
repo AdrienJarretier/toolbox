@@ -33,18 +33,28 @@ def safeguardWord(word):
     return outputWord
 
 
+funnyStrings = [
+    '♥censored-for-fragile-spirits-easily-offended♥',
+    '♥censored-for-love♥',
+    '♥this-is-not-a-bypass-of-the-censorship-filter♥',
+    '♥censored-because-depth-of-vocabulary-is-overrated♥',
+    '♥censored-because-I-don\'t-want-to-get-spanked♥',
+    '♥I hope you do not consider "spanked" a profanity word♥',
+    '♥hearts are peace, hearts are love♥',
+]
+funnyStringsWeights = [1]*(len(funnyStrings)+1)
+
+print(funnyStringsWeights)
+
+
 def safeguardWord2(word):
 
-    return random.choice([
-        '♥censored-for-fragile-spirits-easily-offended♥',
-        '♥censored-for-love♥',
-        '♥this-is-not-a-bypass-of-the-censorship-filter♥',
-        '♥censored-because-depth-of-vocabulary-is-overrated♥',
-        '♥'+'-'.join(['heart' for _ in range(len(word)-2)])+'♥',
-        '♥censored-because-I-don\'t-want-to-get-spanked♥',
-        '♥I hope you do not consider "spanked" a profanity word♥',
-        '♥hearts are peace, hearts are love♥',
-    ]).replace(' ', '-')
+    return random.choice(funnyStrings
+                         + [
+                             '♥' +
+                             '-'.join(['heart' for _ in range(len(word)-2)])+'♥'
+                         ]
+                         ).replace(' ', '-')
 
 
 def safeguardFile(filename):
