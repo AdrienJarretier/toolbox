@@ -3,7 +3,7 @@ from GridBasedGraph import GridBasedGraph
 
 circleRadius = 4.5
 
-graphicalArea = GridBasedGraph((32, 36), 20, key='-GRAPH_AREA-')
+graphicalArea = GridBasedGraph((32, 40), 18, key='-GRAPH_AREA-')
 
 
 ###################### gridResolution ######################
@@ -93,7 +93,7 @@ while True:
         graphicalArea.drawGrid()
 
     if event == 'Save':
-        graphicalArea.saveToFile('drawing.png')
+        graphicalArea.saveToFile('saves/drawing.png')
 
     # print(gridResolution)
 
