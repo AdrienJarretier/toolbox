@@ -13,6 +13,8 @@ try:
     with open(CENSOR_LIST_FILENAME) as inFile:
         censorListContent = inFile.read()
         CENSOR_LIST = censorListContent.split()
+        for i in range(len(CENSOR_LIST)):
+            CENSOR_LIST[i] = CENSOR_LIST[i].lower()
 except FileNotFoundError:
     print('missing censor list file :')
     print('Add ' + CENSOR_LIST_FILENAME)
@@ -86,7 +88,7 @@ def safeguardFile(filename):
                 for i in range(len(words)):
 
                     word = words[i]
-                    if word in CENSOR_LIST:
+                    if word.lower() in CENSOR_LIST:
                         words[i] = replaceWithFunnyString(words[i])
 
                 line = ''.join(words)
