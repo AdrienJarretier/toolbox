@@ -3,6 +3,7 @@ from collections.abc import MutableMapping
 
 RESOURCES = ['machineParts', 'electronics']
 COSTS = [90/5, 100/5]
+WEIGHTS = [2000/5, 2000/5]
 
 
 class Stock(MutableMapping):
@@ -46,18 +47,26 @@ class Stock(MutableMapping):
 
         return cost
 
+    def weight(self):
+        weight = 0
+        for i in range(len(RESOURCES)):
+            weight += self._stock[RESOURCES[i]] * WEIGHTS[i]
+
+        return weight
+
 
 currentStock = Stock({
-    "machineParts": 8,
-    "electronics": 2
+    "machineParts": 13,
+    "electronics": 9
 })
 
 consumption = Stock({
-    "machineParts": 0.6,
-    "electronics": 0.5
+    "machineParts": 0.2,
+    "electronics": 0.2
 })
 
-MAX_COST = 2720/2
+MAX_COST = 23840
+MAX_CARGO = 25000
 
 
 newStock = copy.deepcopy(currentStock)
@@ -124,12 +133,17 @@ while True:
     supplies[maxMissing['resource']] += 5
     newStock = newStock.combine(supplies)
 
-    if supplies.cost() > MAX_COST:
+    if supplies.cost() > MAX_COST or supplies.weight() > MAX_CARGO:
         break
 
 potentialNewStocks.sort(key=lambda s: s['maxMissing']['qty'], reverse=True)
 
 print('potentialNewStocks:')
 for s in potentialNewStocks:
-    print(s['stock']._stock, 'missing :',
-          s['maxMissing'], 'supplies :', s['supplies']._stock, s['supplies'].cost())
+    print('-'*50)
+    print(
+        'stock :   ', s['stock']._stock,
+        '\nmissing : ', s['maxMissing'],
+        '\nsupplies :', s['supplies']._stock,
+        '\ncost :    ', s['supplies'].cost(),
+        '\nweight :  ', s['supplies'].weight())
