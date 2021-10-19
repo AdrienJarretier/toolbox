@@ -131,7 +131,7 @@ while True:
     })
 
     supplies[maxMissing['resource']] += 5
-    newStock = newStock.combine(supplies)
+    newStock[maxMissing['resource']] += 5
 
     if supplies.cost() > MAX_COST or supplies.weight() > MAX_CARGO:
         break
