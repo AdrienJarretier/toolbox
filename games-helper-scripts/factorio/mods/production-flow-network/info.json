@@ -1,0 +1,10 @@
+{
+    "name": "production-flow-network",
+    "version": "0.0.1",
+    "title": "Production Flow Network",
+    "author": "Takama",
+    "factorio_version": "1.1",
+    "dependencies": [
+        "? optional-mod"
+    ]
+}
