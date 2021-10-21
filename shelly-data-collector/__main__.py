@@ -7,6 +7,8 @@ import csv
 
 RECORD_INTERVAL = 'SEC'  # MIN / SEC
 
+WRITE_TO_FILE_INTERVAL_S = 4
+
 pp = pprint.PrettyPrinter(indent=4)
 
 with open('localConfig.json') as configFile:
@@ -14,16 +16,19 @@ with open('localConfig.json') as configFile:
 
 pp.pprint(config['ips'])
 
-with open(path.join('data', 'data.csv'), 'w', newline='') as dataOutputFile:
+with open(path.join('data', 'data'+str(time.time())+'.csv'), 'w', newline='') as dataOutputFile:
     csvWriter = csv.writer(dataOutputFile, delimiter=',')
     csvWriter.writerow(['timestamp']+config['ips'])
+
+    powers = {}
     while True:
+
         timeBefore = time.time()
 
-        powers = {}
         for i in range(len(config['ips'])):
             ip = config['ips'][i]
-            rawContent = urllib.request.urlopen('http://'+ip+'/meter/0').read()
+            rawContent = urllib.request.urlopen(
+                'http://'+ip+'/meter/0').read()
 
             meter = json.loads(rawContent)
 
@@ -31,26 +36,34 @@ with open(path.join('data', 'data.csv'), 'w', newline='') as dataOutputFile:
                 powers[meter['timestamp']] = {}
 
             powers[meter['timestamp']][ip] = meter['power']
-            pp.pprint(meter)
+            # pp.pprint(meter)
 
         # powers.sort(key=lambda m: m['timestamp'])
-        print()
-        pp.pprint(powers)
+        # print()
+        # pp.pprint(powers)
         # print(powers)
-        # print(sorted(powers))
 
-        for timestamp in sorted(powers):
-            row = [timestamp]
+        timestamps = sorted(powers)
+        # print(timestamps)
+
+        if len(timestamps) == WRITE_TO_FILE_INTERVAL_S:
+
+            oldestTimestamp = timestamps[0]
+
+            row = [oldestTimestamp]
             for ip in config['ips']:
-                if ip in powers[timestamp]:
-                    row.append(powers[timestamp][ip])
+                if ip in powers[oldestTimestamp]:
+                    row.append(powers[oldestTimestamp][ip])
                 else:
                     row.append('')
+
+            del powers[oldestTimestamp]
 
             print(row)
             csvWriter.writerow(row)
 
-        dataOutputFile.flush()
+            dataOutputFile.flush()
+
         timeEnd = time.time()
         elapsedTime = timeEnd-timeBefore
         if RECORD_INTERVAL == 'MIN':
