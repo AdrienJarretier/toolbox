@@ -20,20 +20,37 @@ with open(path.join('data', 'data.csv'), 'w', newline='') as dataOutputFile:
     while True:
         timeBefore = time.time()
 
-        powers = []
-        for ip in config['ips']:
+        powers = {}
+        for i in range(len(config['ips'])):
+            ip = config['ips'][i]
             rawContent = urllib.request.urlopen('http://'+ip+'/meter/0').read()
 
             meter = json.loads(rawContent)
 
-            powers.append({
-                'ip': ip,
-                'power': meter['power'],
-                'timestamp': meter['timestamp']
-            })
+            if meter['timestamp'] not in powers:
+                powers[meter['timestamp']] = {}
 
+            powers[meter['timestamp']][ip] = meter['power']
+            pp.pprint(meter)
+
+        # powers.sort(key=lambda m: m['timestamp'])
+        print()
         pp.pprint(powers)
+        # print(powers)
+        # print(sorted(powers))
 
+        for timestamp in sorted(powers):
+            row = [timestamp]
+            for ip in config['ips']:
+                if ip in powers[timestamp]:
+                    row.append(powers[timestamp][ip])
+                else:
+                    row.append('')
+
+            print(row)
+            csvWriter.writerow(row)
+
+        dataOutputFile.flush()
         timeEnd = time.time()
         elapsedTime = timeEnd-timeBefore
         if RECORD_INTERVAL == 'MIN':
