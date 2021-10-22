@@ -5,11 +5,14 @@ import pprint
 import time
 import csv
 
+with open('localConfig.json') as configFile:
+    config = json.load(configFile)
+
 RECORD_INTERVAL = 'SEC'  # MIN / SEC
 
-WRITE_TO_FILE_INTERVAL_S = 4
+POWERS_FIFO_SIZE = config['dataCollectionSettings']['POWERS_FIFO_SIZE']
 
-DATA_COLLECTION_TOTAL_TIME_SEC= 30
+DATA_COLLECTION_TOTAL_TIME_SEC = config['dataCollectionSettings']['COLLECTION_TOTAL_TIME_SEC']
 
 
 def periodUnitTime(struct_time=None):
@@ -53,14 +56,14 @@ def dataCollection(dataFileName):
             # pp.pprint(powers)
             # print(powers)
 
-            timestamps = sorted(powers)
-            print(timestamps)
+            powersTimestamps = sorted(powers)
+            print(powersTimestamps)
 
-            if len(timestamps) >= WRITE_TO_FILE_INTERVAL_S:
+            if len(powersTimestamps) >= POWERS_FIFO_SIZE:
 
-                while len(timestamps) >= WRITE_TO_FILE_INTERVAL_S:
+                while len(powersTimestamps) >= POWERS_FIFO_SIZE:
 
-                    oldestTimestamp = timestamps[0]
+                    oldestTimestamp = powersTimestamps[0]
 
                     row = [oldestTimestamp]
                     for ip in config['ips']:
@@ -70,7 +73,7 @@ def dataCollection(dataFileName):
                             row.append('')
 
                     del powers[oldestTimestamp]
-                    del timestamps[0]
+                    del powersTimestamps[0]
 
                     print(row)
                     csvWriter.writerow(row)
@@ -88,9 +91,6 @@ def dataCollection(dataFileName):
 
 
 pp = pprint.PrettyPrinter(indent=4)
-
-with open('localConfig.json') as configFile:
-    config = json.load(configFile)
 
 pp.pprint(config['ips'])
 
