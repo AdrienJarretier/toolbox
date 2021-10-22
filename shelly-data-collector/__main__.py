@@ -5,16 +5,33 @@ import pprint
 import time
 import csv
 
+RECORD_INTERVAL = 'SEC'  # MIN / SEC
+
+WRITE_TO_FILE_INTERVAL_S = 4
+
+DATA_COLLECTION_TOTAL_TIME_SEC= 30
+
+
+def periodUnitTime(struct_time=None):
+    if struct_time == None:
+        struct_time = time.localtime()
+
+    return int(struct_time.tm_sec/5)
+
+
+powers = {}
+
 
 def dataCollection(dataFileName):
 
     timeDataCollectStart = time.localtime()
+    unitTimeDataCollectStart = periodUnitTime(timeDataCollectStart)
     with open(path.join('data', dataFileName), 'w', newline='') as dataOutputFile:
         csvWriter = csv.writer(dataOutputFile, delimiter=',')
         csvWriter.writerow(['timestamp']+config['ips'])
 
-        powers = {}
-        while time.localtime().tm_min == timeDataCollectStart.tm_min:
+        # while time.localtime().tm_min == timeDataCollectStart.tm_min:
+        while periodUnitTime() == unitTimeDataCollectStart:
 
             timeBefore = time.time()
 
@@ -70,12 +87,6 @@ def dataCollection(dataFileName):
                 raise 'wrong RECORD_INTERVAL value'
 
 
-RECORD_INTERVAL = 'SEC'  # MIN / SEC
-
-WRITE_TO_FILE_INTERVAL_S = 4
-
-# FILE_ROTATION_PERIOD = 'DAY'
-
 pp = pprint.PrettyPrinter(indent=4)
 
 with open('localConfig.json') as configFile:
@@ -83,4 +94,7 @@ with open('localConfig.json') as configFile:
 
 pp.pprint(config['ips'])
 
-dataCollection('data-'+time.strftime('%Y-%m-%d_%H-%M-%S')+'.csv')
+scriptTimeStart = time.time()
+
+while time.time() - scriptTimeStart < DATA_COLLECTION_TOTAL_TIME_SEC:
+    dataCollection('data-'+time.strftime('%Y-%m-%d_%H-%M-%S')+'.csv')
