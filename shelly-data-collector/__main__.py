@@ -21,7 +21,8 @@ with open(path.join('data', 'data'+str(time.time())+'.csv'), 'w', newline='') as
     csvWriter.writerow(['timestamp']+config['ips'])
 
     powers = {}
-    while True:
+    timeScriptStart = time.time()
+    while time.time() - timeScriptStart < 10*60:
 
         timeBefore = time.time()
 
@@ -44,23 +45,26 @@ with open(path.join('data', 'data'+str(time.time())+'.csv'), 'w', newline='') as
         # print(powers)
 
         timestamps = sorted(powers)
-        # print(timestamps)
+        print(timestamps)
 
-        if len(timestamps) == WRITE_TO_FILE_INTERVAL_S:
+        if len(timestamps) >= WRITE_TO_FILE_INTERVAL_S:
 
-            oldestTimestamp = timestamps[0]
+            while len(timestamps) >= WRITE_TO_FILE_INTERVAL_S:
 
-            row = [oldestTimestamp]
-            for ip in config['ips']:
-                if ip in powers[oldestTimestamp]:
-                    row.append(powers[oldestTimestamp][ip])
-                else:
-                    row.append('')
+                oldestTimestamp = timestamps[0]
 
-            del powers[oldestTimestamp]
+                row = [oldestTimestamp]
+                for ip in config['ips']:
+                    if ip in powers[oldestTimestamp]:
+                        row.append(powers[oldestTimestamp][ip])
+                    else:
+                        row.append('')
 
-            print(row)
-            csvWriter.writerow(row)
+                del powers[oldestTimestamp]
+                del timestamps[0]
+
+                print(row)
+                csvWriter.writerow(row)
 
             dataOutputFile.flush()
 
@@ -72,3 +76,5 @@ with open(path.join('data', 'data'+str(time.time())+'.csv'), 'w', newline='') as
             time.sleep(max(0, 1-elapsedTime))
         else:
             raise 'wrong RECORD_INTERVAL value'
+
+        print(time.time() - timeScriptStart)
