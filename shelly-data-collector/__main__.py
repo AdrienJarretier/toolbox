@@ -5,8 +5,9 @@ import pprint
 import time
 import csv
 
-with open('localConfig.json') as configFile:
-    config = json.load(configFile)
+from parseConfig import loadConfig
+
+config = loadConfig()
 
 RECORD_INTERVAL = 'SEC'  # MIN / SEC
 
