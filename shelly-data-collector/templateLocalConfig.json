@@ -3,5 +3,8 @@
     "dataCollectionSettings": {
         "POWERS_FIFO_SIZE": -1,
         "COLLECTION_TOTAL_TIME_SEC": -1
+    },
+    "dataRecordingSettings": {
+        "FILE_ROTATION_PERIOD_SEC": -1
     }
 }

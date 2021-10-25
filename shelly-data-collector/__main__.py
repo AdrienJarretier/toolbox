@@ -15,12 +15,13 @@ POWERS_FIFO_SIZE = config['dataCollectionSettings']['POWERS_FIFO_SIZE']
 
 DATA_COLLECTION_TOTAL_TIME_SEC = config['dataCollectionSettings']['COLLECTION_TOTAL_TIME_SEC']
 
+DATA_FILE_ROTATION_PERIOD = config['dataRecordingSettings']['FILE_ROTATION_PERIOD_SEC']
 
-def periodUnitTime(struct_time=None):
-    if struct_time == None:
-        struct_time = time.localtime()
+def periodUnitTime(timestamp=None):
+    if timestamp == None:
+        timestamp = time.time()
 
-    return int(struct_time.tm_sec/5)
+    return int(timestamp/DATA_FILE_ROTATION_PERIOD)
 
 
 powers = {}
@@ -28,13 +29,12 @@ powers = {}
 
 def dataCollection(dataFileName):
 
-    timeDataCollectStart = time.localtime()
+    timeDataCollectStart = time.time()
     unitTimeDataCollectStart = periodUnitTime(timeDataCollectStart)
     with open(path.join('data', dataFileName), 'w', newline='') as dataOutputFile:
         csvWriter = csv.writer(dataOutputFile, delimiter=',')
         csvWriter.writerow(['timestamp']+config['ips'])
 
-        # while time.localtime().tm_min == timeDataCollectStart.tm_min:
         while periodUnitTime() == unitTimeDataCollectStart:
 
             timeBefore = time.time()
