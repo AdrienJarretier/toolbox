@@ -40,11 +40,6 @@ def askForDict(dic, depth=0):
     return dic
 
 
-with open('templateLocalConfig.json') as configTemplate:
-    # print(json.load(configTemplate))
-    print(askForDict(json.load(configTemplate)))
-
-
 def loadConfig():
     config = {}
 
@@ -52,10 +47,9 @@ def loadConfig():
         with open(CONFIG_FILENAME) as configFile:
             config = json.load(configFile)
     except FileNotFoundError:
-        print('ips (one per line, end with 0) : ')
-        ips = askForList('0')
-        print(ips)
-
-        # with open(CONFIG_FILENAME, 'w') as configFile:
+        with open('templateLocalConfig.json') as configTemplate:
+            config = askForDict(json.load(configTemplate))
+            with open(CONFIG_FILENAME, 'w') as configFile:
+                json.dump(config, configFile, indent=4)
 
     return config
