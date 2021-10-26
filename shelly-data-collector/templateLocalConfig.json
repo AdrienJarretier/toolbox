@@ -6,5 +6,8 @@
     },
     "dataRecordingSettings": {
         "FILE_ROTATION_PERIOD_SEC": -1
+    },
+    "dataPlot": {
+        "outputFolder": "."
     }
 }
