@@ -4,6 +4,7 @@
         "COLLECTION_TOTAL_TIME_SEC": -1
     },
     "dataRecordingSettings": {
+        "outputFolder": "data",
         "FILE_ROTATION_PERIOD_SEC": -1
     },
     "dataPlot": {
