@@ -11,7 +11,7 @@ config = loadConfig()
 
 RECORD_INTERVAL = 'SEC'  # MIN / SEC
 
-POWERS_FIFO_SIZE = config['dataCollectionSettings']['POWERS_FIFO_SIZE']
+POWERS_FIFO_SIZE = 4
 
 DATA_COLLECTION_TOTAL_TIME_SEC = config['dataCollectionSettings']['COLLECTION_TOTAL_TIME_SEC']
 

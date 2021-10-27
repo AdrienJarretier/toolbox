@@ -19,6 +19,9 @@ def askForList(endString):
 def askForInt():
     return int(eval(input()))
 
+def askForString():
+    return input()
+
 
 def askForDict(dic, depth=0):
 
@@ -34,6 +37,8 @@ def askForDict(dic, depth=0):
             dic[k] = askForList('0')
         elif isinstance(v, int):
             dic[k] = askForInt()
+        elif isinstance(v, str):
+            dic[k] = askForString()
 
         # print(k)
 
