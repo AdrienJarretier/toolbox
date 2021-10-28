@@ -17,6 +17,7 @@ DATA_COLLECTION_TOTAL_TIME_SEC = config['dataCollectionSettings']['COLLECTION_TO
 
 DATA_FILE_ROTATION_PERIOD = config['dataRecordingSettings']['FILE_ROTATION_PERIOD_SEC']
 
+
 def periodUnitTime(timestamp=None):
     if timestamp == None:
         timestamp = time.time()
@@ -31,7 +32,7 @@ def dataCollection(dataFileName):
 
     timeDataCollectStart = time.time()
     unitTimeDataCollectStart = periodUnitTime(timeDataCollectStart)
-    with open(path.join('data', dataFileName), 'w', newline='') as dataOutputFile:
+    with open(path.join(config['dataRecordingSettings']['outputFolder'], dataFileName), 'w', newline='') as dataOutputFile:
         csvWriter = csv.writer(dataOutputFile, delimiter=',')
         csvWriter.writerow(['timestamp']+config['ips'])
 
