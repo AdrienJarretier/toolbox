@@ -1,5 +1,7 @@
 import json
 
+from addToLocalExclude import addToLocalExclude
+
 CONFIG_FILENAME = 'localConfig.json'
 
 
@@ -44,6 +46,10 @@ def askForDict(dic, depth=0):
 
     return dic
 
+def addOutputFoldersToLocalExclude(config):
+    for k in config:
+        if 'outputFolder' in config[k]:
+            addToLocalExclude('shelly-data-collector/'+config[k]['outputFolder']+'/**')
 
 def loadConfig():
     config = {}
@@ -56,5 +62,6 @@ def loadConfig():
             config = askForDict(json.load(configTemplate))
             with open(CONFIG_FILENAME, 'w') as configFile:
                 json.dump(config, configFile, indent=4)
+            addOutputFoldersToLocalExclude(config)
 
     return config
