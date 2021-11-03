@@ -80,7 +80,7 @@ def dataCollection(dataFileName):
                     print(row)
                     csvWriter.writerow(row)
 
-                dataOutputFile.flush()
+                # dataOutputFile.flush()
 
             timeEnd = time.time()
             elapsedTime = timeEnd-timeBefore
