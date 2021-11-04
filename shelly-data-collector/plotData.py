@@ -3,7 +3,7 @@ import plotly
 import csv
 import pathlib
 from datetime import datetime
-import math
+from averageToNPoints import averageToNPoints
 
 from parseConfig import loadConfig
 
@@ -14,10 +14,6 @@ p = pathlib.Path(config['dataRecordingSettings']['outputFolder'])
 x = []
 y = []
 y2 = []
-
-# # returns a list of size n averaged data from originalData
-# def averageToNPoints(originalData, n):
-
 
 
 def toFloat(lines, i, j):
@@ -46,15 +42,20 @@ for f in p.iterdir():
             lines = list(csvReader)
             header = lines[0]
             for i in range(1, len(lines)):
-                x.append(datetime.fromtimestamp(int(lines[i][0])).isoformat())
+                x.append(int(lines[i][0]))
                 y.append(toFloat(lines, i, 1))
                 y2.append(toFloat(lines, i, 2))
 
+avgLen = 1669
 
-# df = px.data.gapminder().query("country=='Canada'")
-# fig = px.line(df, x="year", y="lifeExp", title='Life expectancy in Canada')
+x = averageToNPoints(x, avgLen)
+y = averageToNPoints(y, avgLen)
+y2 = averageToNPoints(y2, avgLen)
 
-# fig = go.Figure(layout=go.Layout(width=1920))
+
+for i in range(len(x)):
+    x[i] = datetime.fromtimestamp(x[i]).isoformat()
+
 fig = go.Figure()
 
 fig.add_trace(go.Scatter(x=x, y=y,
