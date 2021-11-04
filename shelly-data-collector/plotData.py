@@ -1,10 +1,7 @@
-from json import load
-from sys import path
-import plotly.express as px
+import plotly.graph_objects as go
 import plotly
 import csv
 import pathlib
-import pandas as pd
 
 from parseConfig import loadConfig
 
@@ -12,23 +9,49 @@ config = loadConfig()
 
 p = pathlib.Path(config['dataRecordingSettings']['outputFolder'])
 
-df = pd.DataFrame(dict(x=[], y=[]))
+x = []
+y = []
+y2 = []
+
+
+def toFloat(val):
+    try:
+        if val != '':
+            return float(val)
+        else:
+            return 0.0
+    except ValueError as ve:
+        print(ve)
+        print(val)
+
 
 for f in p.iterdir():
 
     if f.suffix == '.csv':
         with open(f) as csvFile:
             csvReader = csv.reader(csvFile, delimiter=',')
-            for row in csvReader:
-                print(row)
+            print(f)
+            lines = list(csvReader)
+            header = lines[0]
+            for row in lines[1:]:
+                x.append(row[0])
+                y.append(toFloat(row[1]))
+                y2.append(toFloat(row[2]))
 
-    print()
 
+# df = px.data.gapminder().query("country=='Canada'")
+# fig = px.line(df, x="year", y="lifeExp", title='Life expectancy in Canada')
 
-# # df = px.data.gapminder().query("country=='Canada'")
-# # fig = px.line(df, x="year", y="lifeExp", title='Life expectancy in Canada')
+fig = go.Figure()
 
-fig = px.line(df, x="x", y="y", title="Unsorted Input")
+fig.add_trace(go.Scatter(x=x, y=y,
+                         mode='lines',
+                         name=header[1]))
+
+fig.add_trace(go.Scatter(x=x, y=y2,
+                         mode='lines',
+                         name=header[2]))
+
 
 for _ in range(2):
     outputFolderPath = pathlib.Path(config['dataPlot']['outputFolder'])
@@ -38,4 +61,6 @@ for _ in range(2):
         outputFolderPath.mkdir()
     else:
         break
-# fig.show()
+
+print('written')
+fig.show()
