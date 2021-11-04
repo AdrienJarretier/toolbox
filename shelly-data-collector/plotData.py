@@ -2,6 +2,7 @@ import plotly.graph_objects as go
 import plotly
 import csv
 import pathlib
+from datetime import datetime
 
 from parseConfig import loadConfig
 
@@ -34,7 +35,7 @@ for f in p.iterdir():
             lines = list(csvReader)
             header = lines[0]
             for row in lines[1:]:
-                x.append(row[0])
+                x.append(datetime.fromtimestamp(int(row[0])).isoformat())
                 y.append(toFloat(row[1]))
                 y2.append(toFloat(row[2]))
 
