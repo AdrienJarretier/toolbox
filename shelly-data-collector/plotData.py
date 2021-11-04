@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import plotly
 import csv
 import pathlib
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from averageToNPoints import averageToNPoints
 
 from parseConfig import loadConfig
@@ -54,19 +54,19 @@ y2 = averageToNPoints(y2, avgLen)
 
 
 for i in range(len(x)):
-    x[i] = datetime.fromtimestamp(x[i]).isoformat()
+    x[i] = datetime.fromtimestamp(x[i], timezone(timedelta(hours=0))).isoformat()
 
 fig = go.Figure()
 
-fig.add_trace(go.Scatter(x=x, y=y,
+fig.add_trace(go.Scatter(x=x, y=y2,
                          mode='lines',
-                         name=header[1],
+                         name='Sirsanga',
                          stackgroup='one'
                          ))
 
-fig.add_trace(go.Scatter(x=x, y=y2,
+fig.add_trace(go.Scatter(x=x, y=y,
                          mode='lines',
-                         name=header[2],
+                         name='Takama',
                          stackgroup='one'
                          ))
 
