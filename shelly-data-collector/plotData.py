@@ -3,6 +3,7 @@ import plotly
 import csv
 import pathlib
 from datetime import datetime
+import math
 
 from parseConfig import loadConfig
 
@@ -47,11 +48,15 @@ fig = go.Figure()
 
 fig.add_trace(go.Scatter(x=x, y=y,
                          mode='lines',
-                         name=header[1]))
+                         name=header[1],
+                         stackgroup='one'
+                         ))
 
 fig.add_trace(go.Scatter(x=x, y=y2,
                          mode='lines',
-                         name=header[2]))
+                         name=header[2],
+                         stackgroup='one'
+                         ))
 
 
 for _ in range(2):
@@ -63,5 +68,4 @@ for _ in range(2):
     else:
         break
 
-print('written')
-fig.show()
+print('plot ready')
