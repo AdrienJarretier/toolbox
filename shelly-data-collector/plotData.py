@@ -74,7 +74,7 @@ fig.add_trace(go.Scatter(x=x, y=y,
 for _ in range(2):
     outputFolderPath = pathlib.Path(config['dataPlot']['outputFolder'])
     try:
-        plotly.io.write_html(fig, outputFolderPath.joinpath('plot.html'))
+        plotly.io.write_html(fig, outputFolderPath.joinpath('index.html'))
     except FileNotFoundError:
         outputFolderPath.mkdir()
     else:
