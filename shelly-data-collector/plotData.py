@@ -40,11 +40,12 @@ for f in p.iterdir():
             csvReader = csv.reader(csvFile, delimiter=',')
             print(f)
             lines = list(csvReader)
-            header = lines[0]
-            for i in range(1, len(lines)):
-                x.append(int(lines[i][0]))
-                y.append(toFloat(lines, i, 1))
-                y2.append(toFloat(lines, i, 2))
+            if len(lines) > 0:
+                header = lines[0]
+                for i in range(1, len(lines)):
+                    x.append(int(lines[i][0]))
+                    y.append(toFloat(lines, i, 1))
+                    y2.append(toFloat(lines, i, 2))
 
 avgLen = 1669
 
@@ -54,7 +55,8 @@ y2 = averageToNPoints(y2, avgLen)
 
 
 for i in range(len(x)):
-    x[i] = datetime.fromtimestamp(x[i], timezone(timedelta(hours=0))).isoformat()
+    x[i] = datetime.fromtimestamp(
+        x[i], timezone(timedelta(hours=0))).isoformat()
 
 fig = go.Figure()
 
