@@ -1,0 +1,1 @@
+Contains subfolders named d\<*sides*\>, ex : `d20`
