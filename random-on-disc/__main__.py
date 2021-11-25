@@ -9,18 +9,22 @@ import string
 import random
 
 # SEED = random.randrange(2**64)
-SEED = 9695349962937902509
-print('seed :', SEED)
+
+SEED = 8126021129041542390
+EXCLUDED_LABELS = ['A', 'E', 'G', 'D']
+
+# SEED = 2185830464007306698
+# EXCLUDED_LABELS = ['A']
+
 random.seed(SEED)
 
 
-# img = mpimg.imread('test_image.jpg')
-img = None
-
+img = mpimg.imread('test_images/20211125-1419.png')
+# img = None
 
 DISTRIB_RAIDUS_CAP = 0.3
 
-RATIO_DISTRIB_AREA_TOTAL_AREA = 1/7
+RATIO_DISTRIB_AREA_TOTAL_AREA = 1
 
 if img is not None:
     TOTAL_CIRCLE_RADIUS = max(img.shape[0], img.shape[1])/2
@@ -70,10 +74,28 @@ def plotAll(points):
     plot.show()
 
 
+def removeExcluded(points):
+    try:
+        i = 0
+        while i < len(points):
+
+            if points[i].getLabel() in EXCLUDED_LABELS:
+                points.pop(i)
+            else:
+                i += 1
+    except NameError as ne:
+        print('error :', ne)
+        pass
+
+
 # solvedPoints = greedySolve([Point(0, 0)]+points)
+
+removeExcluded(points)
 solvedPoints = bnbSolve(points)
+
 print('path :', [p.getLabel() for p in solvedPoints])
 print('route length:', routeLength(solvedPoints))
+print('seed :', SEED)
 
 labelAddOrder(solvedPoints)
 plotAll(solvedPoints)
