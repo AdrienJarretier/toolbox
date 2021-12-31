@@ -1,0 +1,14 @@
+{
+    "vitesse_moyenne_kmh": 50,
+    "capacite_reservoir_litres": 50,
+    "consommation_moyenne_l/100km": 5,
+    "coordonnées_origines": [
+        [
+            47.10182196625075,
+            1.7275993941907266
+        ]
+    ],
+    "carburants_requis": [
+        "sp98"
+    ]
+}
