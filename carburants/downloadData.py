@@ -20,7 +20,7 @@ def downloadAndSaveToFile(file_name):
 # return bool, True if new file downloaded, False otherwise
 def downloadIfLocalTooOld(file_name):
 
-    AGE_THRESHOLD_S = 300
+    AGE_THRESHOLD_S = 3600
     fileAge = getLocalFileAge_s(file_name)
 
     if fileAge > AGE_THRESHOLD_S:
