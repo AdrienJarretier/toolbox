@@ -1,3 +1,4 @@
+import time
 from time import sleep
 import zipfile
 import xml.etree.ElementTree as ET
@@ -9,7 +10,7 @@ from downloadData import downloadIfLocalTooOld
 
 def haversine(lon1, lat1, lon2, lat2):
     """
-    Calculate the great circle distance in kilometers between two points 
+    Calculate the great circle distance in kilometers between two points
     on the earth (specified in decimal degrees)
     """
     # convert decimal degrees to radians
@@ -31,11 +32,11 @@ path_to_zip_file = baseFileName+'.zip'
 
 print()
 newDataDownloaded = downloadIfLocalTooOld(path_to_zip_file)
-print("-------- Data downloaded.")
 
 sleep(2)
 
 if newDataDownloaded:
+    print("-------- Data downloaded.")
     with zipfile.ZipFile(path_to_zip_file, 'r') as zip_ref:
         zip_ref.extractall()
 
@@ -49,7 +50,7 @@ INPUTS = getInputs()
 AVERAGE_SPEED = INPUTS["vitesse_moyenne_kmh"]
 FUEL_CAPACITY = INPUTS["capacite_reservoir_litres"]  # L
 FUEL_CONSUMPTION = INPUTS["consommation_moyenne_l/100km"]/100  # L/KM
-ORIGIN_LOCATION = INPUTS["coordonnees_origines"][0]
+ORIGIN_LOCATION = INPUTS["coordonnees_origines"][0]["coords"]
 FUELS_SOLD = INPUTS["carburants_requis"]
 
 
@@ -142,15 +143,20 @@ def hourToPretty(timeInHour):
     return str(int(timeInHour)) + ' h ' + str(int(timeInHour*60) % 60)
 
 
-for pdv in pdvs:
+with open("output-"+time.strftime("%y%m%d-%H%M%S")+".txt", "w") as outFile:
+    def log(string):
+        print(string)
+        outFile.write(string + "\n")
 
-    speed = AVERAGE_SPEED  # km / h
-    time = pdv.distance/speed
+    for pdv in pdvs:
 
-    print('----------------------------------------------------------------------')
-    print(pdv)
-    print("distance : ", pdv.distance)
+        speed = AVERAGE_SPEED  # km / h
+        time = pdv.distance/speed
 
-    print("temps aller-retour : ", hourToPretty(time*2))
+        log('----------------------------------------------------------------------')
+        log(str(pdv))
+        # print("distance : ", pdv.distance)
 
-    print('prix plein : ', pdv.fullTankPrice)
+        # print("temps aller-retour : ", hourToPretty(time*2))
+
+        log('prix plein : ' + str(pdv.fullTankPrice))
