@@ -1,12 +1,13 @@
 import random
 import numpy as np
-
+from plotnine import ggplot, geom_col, aes, geom_text, position_stack, position_nudge
+import pandas as pd
 
 conditions = 2
 
-replicates = 6
+replicates = 1
 
-simulationsCount = 10000
+simulationsCount = 30000
 
 
 samples = conditions*replicates
@@ -34,6 +35,7 @@ for _ in range(simulationsCount):
 
     successesPerExp[successes] += 1
 
+# print(successesPerExp)
 
 for i in range(len(successesPerExp)):
     if successesPerExp[i] == 0:
@@ -59,3 +61,19 @@ successesPerExp.update(zip(successesPerExp, cumulatedPercentages))
 print()
 for i in successesPerExp.keys():
     print(i, ':', successesPerExp[i])
+
+
+plot = (ggplot(pd.DataFrame(data={"x": successesPerExp.keys(), "y": successesPerExp.values()}),
+               aes(x="x", y="y", label='y')
+               )
+        + geom_col()
+        + geom_text(position=position_nudge(y=0.03))
+        )
+
+
+# data = pd.DataFrame(successesPerExp.items(), columns=['age', 'pop'])
+
+# plot = ggplot(pd.DataFrame(data), aes("age")
+#               ) + geom_col(aes(y='pop'))
+
+print(plot)
