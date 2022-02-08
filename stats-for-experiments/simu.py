@@ -1,13 +1,13 @@
+from plotnine import ggplot, geom_col, aes, geom_text, position_stack, position_nudge, scale_x_continuous, scale_x_discrete
 import random
 import numpy as np
-from plotnine import ggplot, geom_col, aes, geom_text, position_stack, position_nudge
 import pandas as pd
 
 conditions = 2
 
-replicates = 1
+replicates = 6
 
-simulationsCount = 30000
+simulationsCount = 100000
 
 
 samples = conditions*replicates
@@ -62,18 +62,23 @@ print()
 for i in successesPerExp.keys():
     print(i, ':', successesPerExp[i])
 
+decimalsForRound = 0
+lastValue = list(successesPerExp.values())[-1]
+while int(lastValue * 10**decimalsForRound) == 0:
+    decimalsForRound += 1
 
-plot = (ggplot(pd.DataFrame(data={"x": successesPerExp.keys(), "y": successesPerExp.values()}),
+data = pd.DataFrame(data={"x": successesPerExp.keys(),
+                    "y": successesPerExp.values()})
+
+
+plot = (ggplot(data,
                aes(x="x", y="y", label='y')
                )
         + geom_col()
-        + geom_text(position=position_nudge(y=0.03))
+        + geom_text(data=data.round(decimalsForRound),
+                    position=position_nudge(y=0.03))
+        + scale_x_continuous(breaks=list(successesPerExp.keys()))
         )
 
-
-# data = pd.DataFrame(successesPerExp.items(), columns=['age', 'pop'])
-
-# plot = ggplot(pd.DataFrame(data), aes("age")
-#               ) + geom_col(aes(y='pop'))
 
 print(plot)
