@@ -1,12 +1,12 @@
 import random
-import fractions
+import numpy as np
 
 
 conditions = 2
 
 replicates = 6
 
-simulationsCount = 60000
+simulationsCount = 10000
 
 
 samples = conditions*replicates
@@ -36,14 +36,26 @@ for _ in range(simulationsCount):
 
 
 for i in range(len(successesPerExp)):
-    successesPerExp[i] /= simulationsCount
+    if successesPerExp[i] == 0:
+        del successesPerExp[i]
+
+print(successesPerExp)
+
+values = list(successesPerExp.values())
+flipped = np.flip(values)
+flippedCumulatedValues = np.cumsum(flipped)
+cumulatedValues = np.flip(flippedCumulatedValues)
+cumulatedPercentages = list(map(lambda x: x/simulationsCount, cumulatedValues))
 
 
-for i in range(1, len(successesPerExp)):
-    successesPerExp[i] += successesPerExp[i-1]
+print('values: ', values)
+print('flipped: ', flipped)
+print('flippedCumulatedValues: ', flippedCumulatedValues)
+print('cumulatedValues: ', cumulatedValues)
+print('cumulatedPercentages: ', cumulatedPercentages)
 
+successesPerExp.update(zip(successesPerExp, cumulatedPercentages))
 
-for i in range(len(successesPerExp)):
-
-    if successesPerExp[i] > 0:
-        print(i, ':', successesPerExp[i])
+print()
+for i in successesPerExp.keys():
+    print(i, ':', successesPerExp[i])
