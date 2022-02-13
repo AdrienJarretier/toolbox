@@ -9,8 +9,8 @@ from asyncore import read
 currentRH_times_hundred = 72
 currentTemp = 20.7
 
-tmpRH = 71
-tmpTemp = 18
+tmpRH = 73
+tmpTemp = 17.1
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -53,9 +53,11 @@ currentRH = currentRH_times_hundred/100
 
 maxMoisture_CurrentTemp = getMaxMoistureContent(currentTemp)
 
-for temp_times_ten in range(tmpTemp*10-5, tmpTemp*10+5):
+tempConfidenceInterval = 2
+rhConfidenceInterval = 5
+for temp_times_ten in range(int((tmpTemp-tempConfidenceInterval)*10), int((tmpTemp+tempConfidenceInterval)*10)+1):
     temp = temp_times_ten/10
-    for rh_times_hundred in range(tmpRH-5, tmpRH+5):
+    for rh_times_hundred in range(tmpRH-rhConfidenceInterval, tmpRH+rhConfidenceInterval+1):
 
         rh = rh_times_hundred/100
         moisture = rh * getMaxMoistureContent(temp)
@@ -68,5 +70,9 @@ for temp_times_ten in range(tmpTemp*10-5, tmpTemp*10+5):
             print(rh_times_hundred,'%,',temp,'C - ',rh_whenReturningCurrentTemp_times_hundred,'% at',currentTemp,'C')
 
 
-print('currentRH :', currentRH_times_hundred)
-print('currentTemp :', currentTemp)
+print()
+print('oldRH :', currentRH_times_hundred)
+print('targetTemp :', currentTemp)
+print()
+print('currentRH :', tmpRH)
+print('currentTemp :', tmpTemp)
