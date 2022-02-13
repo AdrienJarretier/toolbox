@@ -5,6 +5,7 @@
 # fi = rho_w / rho_ws
 
 from asyncore import read
+from math import ceil, floor
 
 currentRH_times_hundred = 72
 currentTemp = 20.7
@@ -53,11 +54,13 @@ currentRH = currentRH_times_hundred/100
 
 maxMoisture_CurrentTemp = getMaxMoistureContent(currentTemp)
 
-tempConfidenceInterval = 2
-rhConfidenceInterval = 5
-for temp_times_ten in range(int((tmpTemp-tempConfidenceInterval)*10), int((tmpTemp+tempConfidenceInterval)*10)+1):
+print()
+
+tempConfidenceInterval = 2*0.7
+rhConfidenceInterval = 5*0.7
+for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tmpTemp+tempConfidenceInterval)*10)+1):
     temp = temp_times_ten/10
-    for rh_times_hundred in range(tmpRH-rhConfidenceInterval, tmpRH+rhConfidenceInterval+1):
+    for rh_times_hundred in range(floor(tmpRH-rhConfidenceInterval), ceil(tmpRH+rhConfidenceInterval)+1):
 
         rh = rh_times_hundred/100
         moisture = rh * getMaxMoistureContent(temp)
