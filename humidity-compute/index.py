@@ -40,14 +40,8 @@ def getMaxMoistureContent(temp):
     tempHi = ti
     maxMoistureHigh = maximumMoistureContentKnown[i][1]
 
-    # print(tempLow, maxMoistureLow, '-', tempHi, maxMoistureHigh, end='')
-
     return (temp-tempLow)/(tempHi-tempLow)*(maxMoistureHigh-maxMoistureLow)+maxMoistureLow
 
-# for tTest in range(5*10,10*10+1):
-#     print(tTest/10,'- ', end = '')
-#     maxMoistContent = getMaxMoistureContent(tTest/10)
-#     print(' : ', maxMoistContent)
 
 tempBeforeOpening = currentTemp
 maxMoisture_tempBeforeOpening = getMaxMoistureContent(tempBeforeOpening)
@@ -65,10 +59,12 @@ for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tm
 
         rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
 
-        rh_whenReturning_tempBeforeOpening_times_hundred = round(rh_whenReturning_tempBeforeOpening*100)
+        rh_whenReturning_tempBeforeOpening_times_hundred = round(
+            rh_whenReturning_tempBeforeOpening*100)
 
         if rh_whenReturning_tempBeforeOpening_times_hundred <= 50:
-            print(rh_times_hundred,'%,',temp,'C - ',rh_whenReturning_tempBeforeOpening_times_hundred,'% at',currentTemp,'C')
+            print(rh_times_hundred, '%,', temp, 'C - ',
+                  rh_whenReturning_tempBeforeOpening_times_hundred, '% at', currentTemp, 'C')
 
 
 print()
@@ -77,7 +73,6 @@ print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
-print('target temps for 50% RH when returning at',tempBeforeOpening,':',)
-# print()
+print('target temps for 50% RH when returning at', tempBeforeOpening, ':',)
 # print()
 # print('RH at',targetTemp,':',rh_whenReturningTargetTemp_times_hundred)
