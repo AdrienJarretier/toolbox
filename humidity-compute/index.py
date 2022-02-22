@@ -8,6 +8,7 @@ from asyncore import read
 from math import ceil, floor
 
 currentTemp = 19.9
+currentRH = 62
 
 tmpRH = 62
 tmpTemp = 21.2
@@ -28,22 +29,50 @@ maximumMoistureContentKnown = [
 ]
 
 
-def getMaxMoistureContent(temp):
-    ti = maximumMoistureContentKnown[0][0]
+def interpolate(fixedIndex, fixedValue):
+    ti = maximumMoistureContentKnown[0][fixedIndex]
     i = 0
-    while ti <= temp:
+    while ti <= fixedValue:
         i += 1
-        ti = maximumMoistureContentKnown[i][0]
+        ti = maximumMoistureContentKnown[i][fixedIndex]
 
-    tempLow = maximumMoistureContentKnown[i-1][0]
-    maxMoistureLow = maximumMoistureContentKnown[i-1][1]
+    tempLow = maximumMoistureContentKnown[i-1][fixedIndex]
+    maxMoistureLow = maximumMoistureContentKnown[i-1][1-fixedIndex]
     tempHi = ti
-    maxMoistureHigh = maximumMoistureContentKnown[i][1]
+    maxMoistureHigh = maximumMoistureContentKnown[i][1-fixedIndex]
 
-    return (temp-tempLow)/(tempHi-tempLow)*(maxMoistureHigh-maxMoistureLow)+maxMoistureLow
+    return (fixedValue-tempLow)/(tempHi-tempLow)*(maxMoistureHigh-maxMoistureLow)+maxMoistureLow
+
+
+def getMaxMoistureContent(temp):
+    return interpolate(0, temp)
+
+
+def getTempForGivenMaxMoisture(maxMoistureContent):
+    return interpolate(1, maxMoistureContent)
+
+# Given a high temperature before opening windows,
+# and admiting a given constant RH
+# Computes the max temperature at which the air needs to go down
+# to get the given target RH when temp goes back up
+# assuming the abs moisture will stay constant after having closed the windows
+
+
+def computeLowTempTarget(highTempBeforeOpening, RHBeforeOpening_timesHundred, targetRH_timesHundred=50):
+
+    targetRh = targetRH_timesHundred / 100
+    RHBeforeOpening = RHBeforeOpening_timesHundred / 100
+
+    targetMoisture = getMaxMoistureContent(highTempBeforeOpening) * targetRh
+
+    targetMaxMoisture = targetMoisture / RHBeforeOpening
+
+    return getTempForGivenMaxMoisture(targetMaxMoisture)
 
 
 tempBeforeOpening = currentTemp
+rhBeforeOpening = currentRH
+
 maxMoisture_tempBeforeOpening = getMaxMoistureContent(tempBeforeOpening)
 
 # print()
@@ -73,6 +102,7 @@ print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
-print('target temps for 50% RH when returning at', tempBeforeOpening, ':',)
+print('target temps for 50% RH when returning at', tempBeforeOpening, ':',
+      computeLowTempTarget(tempBeforeOpening, rhBeforeOpening))
 # print()
 # print('RH at',targetTemp,':',rh_whenReturningTargetTemp_times_hundred)
