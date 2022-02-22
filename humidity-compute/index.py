@@ -46,25 +46,25 @@ def getMaxMoistureContent(temp):
 tempBeforeOpening = currentTemp
 maxMoisture_tempBeforeOpening = getMaxMoistureContent(tempBeforeOpening)
 
-print()
+# print()
 
-tempConfidenceInterval = 2*0.0
-rhConfidenceInterval = 5*0.0
-for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tmpTemp+tempConfidenceInterval)*10)+1):
-    temp = temp_times_ten/10
-    for rh_times_hundred in range(floor(tmpRH-rhConfidenceInterval), ceil(tmpRH+rhConfidenceInterval)+1):
+# tempConfidenceInterval = 2*0.0
+# rhConfidenceInterval = 5*0.0
+# for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tmpTemp+tempConfidenceInterval)*10)+1):
+#     temp = temp_times_ten/10
+#     for rh_times_hundred in range(floor(tmpRH-rhConfidenceInterval), ceil(tmpRH+rhConfidenceInterval)+1):
 
-        rh = rh_times_hundred/100
-        moisture = rh * getMaxMoistureContent(temp)
+#         rh = rh_times_hundred/100
+#         moisture = rh * getMaxMoistureContent(temp)
 
-        rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
+#         rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
 
-        rh_whenReturning_tempBeforeOpening_times_hundred = round(
-            rh_whenReturning_tempBeforeOpening*100)
+#         rh_whenReturning_tempBeforeOpening_times_hundred = round(
+#             rh_whenReturning_tempBeforeOpening*100)
 
-        if rh_whenReturning_tempBeforeOpening_times_hundred <= 50:
-            print(rh_times_hundred, '%,', temp, 'C - ',
-                  rh_whenReturning_tempBeforeOpening_times_hundred, '% at', currentTemp, 'C')
+#         if rh_whenReturning_tempBeforeOpening_times_hundred <= 50:
+#             print(rh_times_hundred, '%,', temp, 'C - ',
+#                   rh_whenReturning_tempBeforeOpening_times_hundred, '% at', currentTemp, 'C')
 
 
 print()
