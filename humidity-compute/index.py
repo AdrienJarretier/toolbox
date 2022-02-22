@@ -7,11 +7,10 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH_times_hundred = 72
-currentTemp = 20.7
+currentTemp = 19.9
 
-tmpRH = 73
-tmpTemp = 17.1
+tmpRH = 62
+tmpTemp = 21.2
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -50,14 +49,13 @@ def getMaxMoistureContent(temp):
 #     maxMoistContent = getMaxMoistureContent(tTest/10)
 #     print(' : ', maxMoistContent)
 
-currentRH = currentRH_times_hundred/100
-
-maxMoisture_CurrentTemp = getMaxMoistureContent(currentTemp)
+tempBeforeOpening = currentTemp
+maxMoisture_tempBeforeOpening = getMaxMoistureContent(tempBeforeOpening)
 
 print()
 
-tempConfidenceInterval = 2*0.7
-rhConfidenceInterval = 5*0.7
+tempConfidenceInterval = 2*0.0
+rhConfidenceInterval = 5*0.0
 for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tmpTemp+tempConfidenceInterval)*10)+1):
     temp = temp_times_ten/10
     for rh_times_hundred in range(floor(tmpRH-rhConfidenceInterval), ceil(tmpRH+rhConfidenceInterval)+1):
@@ -65,17 +63,21 @@ for temp_times_ten in range(floor((tmpTemp-tempConfidenceInterval)*10), ceil((tm
         rh = rh_times_hundred/100
         moisture = rh * getMaxMoistureContent(temp)
 
-        rh_whenReturningCurrentTemp = moisture / maxMoisture_CurrentTemp
+        rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
 
-        rh_whenReturningCurrentTemp_times_hundred = round(rh_whenReturningCurrentTemp*100)
+        rh_whenReturning_tempBeforeOpening_times_hundred = round(rh_whenReturning_tempBeforeOpening*100)
 
-        if rh_whenReturningCurrentTemp_times_hundred <= 50:
-            print(rh_times_hundred,'%,',temp,'C - ',rh_whenReturningCurrentTemp_times_hundred,'% at',currentTemp,'C')
+        if rh_whenReturning_tempBeforeOpening_times_hundred <= 50:
+            print(rh_times_hundred,'%,',temp,'C - ',rh_whenReturning_tempBeforeOpening_times_hundred,'% at',currentTemp,'C')
 
 
 print()
-print('oldRH :', currentRH_times_hundred)
-print('targetTemp :', currentTemp)
+print('temperature before opening windows :', tempBeforeOpening)
 print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
+print()
+print('target temps for 50% RH when returning at',tempBeforeOpening,':',)
+# print()
+# print()
+# print('RH at',targetTemp,':',rh_whenReturningTargetTemp_times_hundred)
