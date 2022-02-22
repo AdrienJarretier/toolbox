@@ -103,6 +103,6 @@ print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
 print('target temps for 50% RH when returning at', tempBeforeOpening, ':',
-      computeLowTempTarget(tempBeforeOpening, rhBeforeOpening))
+      ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening)*10)/10)
 # print()
 # print('RH at',targetTemp,':',rh_whenReturningTargetTemp_times_hundred)
