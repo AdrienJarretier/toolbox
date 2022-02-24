@@ -7,11 +7,11 @@
 from asyncore import read
 from math import ceil, floor
 
-currentTemp = 19.9
-currentRH = 62
+currentRH = 64
+currentTemp = 20.1
 
-tmpRH = 62
-tmpTemp = 21.2
+tmpRH = 60
+tmpTemp = 18.2
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -83,13 +83,13 @@ maxMoisture_tempBeforeOpening = getMaxMoistureContent(tempBeforeOpening)
 #     temp = temp_times_ten/10
 #     for rh_times_hundred in range(floor(tmpRH-rhConfidenceInterval), ceil(tmpRH+rhConfidenceInterval)+1):
 
-#         rh = rh_times_hundred/100
-#         moisture = rh * getMaxMoistureContent(temp)
+rh = tmpRH/100
+moisture = rh * getMaxMoistureContent(tmpTemp)
 
-#         rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
+rh_whenReturning_tempBeforeOpening = moisture / maxMoisture_tempBeforeOpening
 
-#         rh_whenReturning_tempBeforeOpening_times_hundred = round(
-#             rh_whenReturning_tempBeforeOpening*100)
+rh_whenReturning_tempBeforeOpening_times_hundred = round(
+    rh_whenReturning_tempBeforeOpening*100)
 
 #         if rh_whenReturning_tempBeforeOpening_times_hundred <= 50:
 #             print(rh_times_hundred, '%,', temp, 'C - ',
@@ -104,5 +104,5 @@ print('currentTemp :', tmpTemp)
 print()
 print('target temps for 50% RH when returning at', tempBeforeOpening, ':',
       ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening)*10)/10)
-# print()
-# print('RH at',targetTemp,':',rh_whenReturningTargetTemp_times_hundred)
+print()
+print('RH at', tempBeforeOpening, ':', rh_whenReturning_tempBeforeOpening_times_hundred)
