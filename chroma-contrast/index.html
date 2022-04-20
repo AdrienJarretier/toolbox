@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>chroma.contrast</title>
+    <script src="../extLibs/chroma-2.4.2.min.js"></script>
+    <script src="../extLibs/jquery-3.4.1.min.js"></script>
+    <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+
+    <link href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        input {
+            height: 50px;
+            font-size: 1em;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="row mt-3">
+            <div class="col">
+
+                <h3 id="chroma-contrast"><a href="#chroma-contrast">chroma.contrast</a>
+                    <h4 id="-color1-color2-">(color1, color2)</h4>
+                </h3>
+                <p>Computes the WCAG contrast ratio between two colors. A minimum contrast of 4.5:1 <a
+                        href="http://www.w3.org/TR/WCAG20-TECHS/G18.html">is recommended</a> to ensure that text is
+                    still
+                    readable
+                    against a background color.</p>
+
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-4">
+                <input type="text" id="input1">
+            </div>
+            <div class="col">
+                <input type="text" id="input2">
+            </div>
+        </div>
+
+
+        <div class="row mt-2">
+            <div class="col-4">
+                <button class="btn btn-secondary" id="Brighten-1">Brighten</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-secondary" id="Brighten-2">Brighten</button>
+            </div>
+        </div>
+
+
+        <div class="row mt-2">
+            <div class="col-4">
+                <button class="btn btn-dark" id="Darken-1">Darken</button>
+            </div>
+            <div class="col">
+                <button class="btn btn-dark" id="Darken-2">Darken</button>
+            </div>
+        </div>
+
+
+        <div class="row mt-3">
+            <div class="col">
+
+                <p>Constrast :</p>
+                <div id="resultOutput"></div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+        function setStyle(inputElement, color) {
+
+            inputElement.css('background-color', color.css());
+
+            if (chroma.contrast(color, 'black') < 4.5)
+                inputElement.css('color', 'white');
+        }
+
+        function getValAsColor(inputElement) {
+
+            const val = inputElement.val().trim();
+            inputElement.val(val);
+
+            return chroma(val);
+        }
+
+        function brightenForContrast(color, refColor) {
+
+
+        }
+
+        function compute() {
+
+            let input1 = $('#input1');
+            let input2 = $('#input2');
+
+            const color1 = getValAsColor(input1);
+            const color2 = getValAsColor(input2);
+
+            setStyle(input1, color1);
+            setStyle(input2, color2);
+
+            $('#resultOutput').text(chroma.contrast(color1, color2));
+        }
+
+        $('#input1').change(compute);
+        $('#input2').change(compute);
+
+        $('#Brighten-2').click(function(){
+            brightenForContrast(2);
+        });
+
+        compute();
+
+    </script>
+
+
+</body>
+
+</html>
