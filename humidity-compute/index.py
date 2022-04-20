@@ -7,11 +7,11 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH = 64
-currentTemp = 20.1
+currentRH = 63.3
+currentTemp = 23.2
 
-tmpRH = 60
-tmpTemp = 18.2
+tmpRH = 56
+tmpTemp = 19.2
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -102,7 +102,10 @@ print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
-print('target temps for 50% RH when returning at', tempBeforeOpening, ':',
-      ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening)*10)/10)
+print('target temp with',rhBeforeOpening,'% RH for 50% RH when returning at', tempBeforeOpening, ':',
+      ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening, 50)*10)/10)
 print()
 print('RH at', tempBeforeOpening, ':', rh_whenReturning_tempBeforeOpening_times_hundred)
+print()
+print('target temp with',tmpRH,'% RH for 50% RH when returning at', tempBeforeOpening, ':',
+      ceil(computeLowTempTarget(tempBeforeOpening, tmpRH, 50)*10)/10)
