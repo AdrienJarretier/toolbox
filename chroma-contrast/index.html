@@ -53,20 +53,10 @@
 
     <div class="row mt-2">
       <div class="col-4">
-        <button class="btn btn-secondary" id="Brighten-1">Brighten</button>
+        <button class="btn btn-secondary" id="FixForContrast-1">Fix for contrast</button>
       </div>
       <div class="col">
-        <button class="btn btn-secondary" id="Brighten-2">Brighten</button>
-      </div>
-    </div>
-
-
-    <div class="row mt-2">
-      <div class="col-4">
-        <button class="btn btn-dark" id="Darken-1">Darken</button>
-      </div>
-      <div class="col">
-        <button class="btn btn-dark" id="Darken-2">Darken</button>
+        <button class="btn btn-secondary" id="FixForContrast-2">Fix for contrast</button>
       </div>
     </div>
 
@@ -123,31 +113,10 @@
       setStyle(input1, color1);
       setStyle(input2, color2);
 
-      let L1 = color1.luminance();
-      let L2 = color2.luminance();
-      if (L1 < L2) {
-        const tmp = L1;
-        L1 = L2;
-        L2 = tmp;
-      }
-
-      console.log('c1 lum : ', L1);
-      console.log('c2 lum : ', L2);
-      console.log('contrast ratio :', (L1 + 0.05) / (L2 + 0.05));
-      console.log();
-      console.log('target l1 lum : ', 4.5 * (L2 + 0.05) - 0.05);
-      console.log('or');
-      console.log('target l2 lum : ', (L1 + 0.05) / 4.5 - 0.05);
-
       $('#resultOutput').text(chroma.contrast(color1, color2));
     }
 
-    $('#input1').change(compute);
-    $('#input2').change(compute);
-
-
-
-    function darkenForContrast(colorNum) {
+    function fixForContrast(colorNum) {
 
       const input1 = $('#input' + colorNum);
       const input2 = $('#input' + (3 - colorNum));
@@ -175,37 +144,38 @@
         lighterLum = lum1;
       }
 
-      const lighterTargetLum = 4.5 * (darkerLum + 0.05) - 0.05;
-      const darkerTargetLum = (lighterLum + 0.05) / 4.5 - 0.05;
+      const TARGET_CONTRAST = 4.5;
 
-      let targetColor;
+      const lighterTargetLum = TARGET_CONTRAST * (darkerLum + 0.05) - 0.05;
+      const darkerTargetLum = (lighterLum + 0.05) / TARGET_CONTRAST - 0.05;
+
+      let targetLum;
 
       if (input1 == lighterInput)
-        targetColor = color1.luminance(lighterTargetLum);
+        targetLum = lighterTargetLum;
       else
-        targetColor = color2.luminance(darkerTargetLum);
+        targetLum = darkerTargetLum;
 
-      setColor(input1, targetColor);
+      if (0 > targetLum || targetLum > 1)
+        console.log('error');
+      else {
 
-      // input.val(color.darken(0.1).hex());
+        console.log('target : ', targetLum);
+        targetColor = color1.luminance(targetLum);
+        console.log('color1.luminance() : ', color1.luminance());
+        console.log('diff : ', targetLum - color1.luminance());
+        setColor(input1, targetColor);
+      }
 
     }
 
-    function brightenForContrast(colorNum) {
-
-      let input = $('#input' + colorNum);
-      let color = getValAsColor(input);
-      // input.val(color.brighten(0.1).hex());
-
-    }
+    $('#input1').change(compute);
+    $('#input2').change(compute);
 
     for (let i = 1; i < 3; ++i) {
-      $('#Brighten-' + i).click(function () {
-        brightenForContrast(i);
-        compute();
-      });
-      $('#Darken-' + i).click(function () {
-        darkenForContrast(i);
+
+      $('#FixForContrast-' + i).click(function () {
+        fixForContrast(i);
         compute();
       });
     }
