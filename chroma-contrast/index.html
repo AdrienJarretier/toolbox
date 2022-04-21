@@ -7,6 +7,7 @@
   <title>chroma.contrast</title>
   <script src="../extLibs/chroma-2.4.2.min.js"></script>
   <script src="../extLibs/jquery-3.4.1.min.js"></script>
+  <script src="../extLibs/popper-2.9.2.min.js"></script>
   <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
 
   <link href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
@@ -52,10 +53,10 @@
 
     <div class="row mt-2">
       <div class="col-4">
-        <button class="btn btn-secondary" id="FixForContrast-1">Fix for contrast</button>
+        <a tabindex="0" class="btn btn-secondary" id="FixForContrast-1">Fix for contrast</a>
       </div>
       <div class="col">
-        <button class="btn btn-secondary" id="FixForContrast-2">Fix for contrast</button>
+        <a tabindex="0" class="btn btn-secondary" id="FixForContrast-2">Fix for contrast</a>
       </div>
     </div>
 
@@ -68,13 +69,17 @@
 
       </div>
     </div>
-
-
   </div>
 
 
 
   <script>
+
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl)
+    })
+
 
     function setStyle(inputElement, color) {
 
@@ -114,7 +119,7 @@
       $('#resultOutput').text(chroma.contrast(color1, color2));
     }
 
-    function fixForContrast(colorNum) {
+    function fixForContrast(colorNum, popover) {
 
       const input1 = $('#input' + colorNum);
       const input2 = $('#input' + (3 - colorNum));
@@ -122,55 +127,60 @@
       let color1 = getValAsColor(input1);
       let color2 = getValAsColor(input2);
 
-      const lum1 = color1.luminance();
-      const lum2 = color2.luminance();
-
-      let darkerInput;
-      let darkerLum;
-      let lighterInput;
-      let lighterLum;
-
-      if (lum1 < lum2) {
-        darkerInput = input1;
-        darkerLum = lum1;
-        lighterInput = input2;
-        lighterLum = lum2;
-      } else {
-        darkerInput = input2;
-        darkerLum = lum2;
-        lighterInput = input1;
-        lighterLum = lum1;
-      }
-
       const TARGET_CONTRAST = 4.5;
-      const lighterTargetLum = TARGET_CONTRAST * (darkerLum + 0.05) - 0.05;
-      const darkerTargetLum = (lighterLum + 0.05) / TARGET_CONTRAST - 0.05;
+      if (chroma.contrast(color1, color2) < TARGET_CONTRAST) {
 
-      let targetLum;
+        const lum1 = color1.luminance();
+        const lum2 = color2.luminance();
 
-      if (input1 == lighterInput)
-        targetLum = lighterTargetLum;
-      else
-        targetLum = darkerTargetLum;
+        let darkerInput;
+        let darkerLum;
+        let lighterInput;
+        let lighterLum;
 
-      if (0 > targetLum || targetLum > 1)
-        console.log('error');
-      else {
-
-        do {
-          targetColor1 = color1.luminance(targetLum);
-          if (input1 == lighterInput)
-            targetLum += 0.001;
-          else
-            targetLum -= 0.001;
+        if (lum1 < lum2) {
+          darkerInput = input1;
+          darkerLum = lum1;
+          lighterInput = input2;
+          lighterLum = lum2;
+        } else {
+          darkerInput = input2;
+          darkerLum = lum2;
+          lighterInput = input1;
+          lighterLum = lum1;
         }
-        while (chroma.contrast(targetColor1, color2) < TARGET_CONTRAST)
-        // console.log('target : ', targetLum);
-        // console.log('color1.luminance() : ', color1.luminance());
-        // console.log('diff : ', targetLum - color1.luminance());
-        setColor(input1, targetColor1);
-      }
 
+        const lighterTargetLum = TARGET_CONTRAST * (darkerLum + 0.05) - 0.05;
+        const darkerTargetLum = (lighterLum + 0.05) / TARGET_CONTRAST - 0.05;
+
+        let targetLum;
+
+        if (input1 == lighterInput)
+          targetLum = lighterTargetLum;
+        else
+          targetLum = darkerTargetLum;
+
+        if (0 > targetLum || targetLum > 1) {
+
+          console.log('error');
+          popover.show();
+        }
+        else {
+
+          do {
+            targetColor1 = color1.luminance(targetLum);
+            if (input1 == lighterInput)
+              targetLum += 0.001;
+            else
+              targetLum -= 0.001;
+          }
+          while (chroma.contrast(targetColor1, color2) < TARGET_CONTRAST)
+          // console.log('target : ', targetLum);
+          // console.log('color1.luminance() : ', color1.luminance());
+          // console.log('diff : ', targetLum - color1.luminance());
+          setColor(input1, targetColor1);
+        }
+      }
     }
 
     $('#input1').change(compute);
@@ -178,8 +188,15 @@
 
     for (let i = 1; i < 3; ++i) {
 
-      $('#FixForContrast-' + i).click(function () {
-        fixForContrast(i);
+      fixButton = $('#FixForContrast-' + i);
+
+      const popover = new bootstrap.Popover(fixButton, {
+        content: 'Cannot reach 4.5:1 contrast',
+        trigger: 'focus'
+      })
+
+      fixButton.click(function () {
+        fixForContrast(i, popover);
         compute();
       });
     }
