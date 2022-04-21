@@ -75,11 +75,10 @@
 
   <script>
 
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-      return new bootstrap.Popover(popoverTriggerEl)
-    })
-
+    // var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    // var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+    //   return new bootstrap.Popover(popoverTriggerEl)
+    // })
 
     function setStyle(inputElement, color) {
 
@@ -162,8 +161,8 @@
 
         if (0 > targetLum || targetLum > 1) {
 
-          console.log('error');
           popover.show();
+          setTimeout(() => popover.hide(), 1000);
         }
         else {
 
@@ -191,14 +190,15 @@
       fixButton = $('#FixForContrast-' + i);
 
       const popover = new bootstrap.Popover(fixButton, {
-        content: 'Cannot reach 4.5:1 contrast',
-        trigger: 'focus'
-      })
+        content: 'Cannot reach 4.5:1 contrast'
+        , trigger: 'manual'
+      });
 
       fixButton.click(function () {
         fixForContrast(i, popover);
         compute();
       });
+
     }
 
     compute();
