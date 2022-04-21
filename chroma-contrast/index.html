@@ -36,7 +36,6 @@
           readable
           against a background color.</p>
 
-
       </div>
     </div>
 
@@ -66,7 +65,6 @@
 
         <p>Constrast :</p>
         <div id="resultOutput"></div>
-
 
       </div>
     </div>
@@ -145,7 +143,6 @@
       }
 
       const TARGET_CONTRAST = 4.5;
-
       const lighterTargetLum = TARGET_CONTRAST * (darkerLum + 0.05) - 0.05;
       const darkerTargetLum = (lighterLum + 0.05) / TARGET_CONTRAST - 0.05;
 
@@ -160,11 +157,18 @@
         console.log('error');
       else {
 
-        console.log('target : ', targetLum);
-        targetColor = color1.luminance(targetLum);
-        console.log('color1.luminance() : ', color1.luminance());
-        console.log('diff : ', targetLum - color1.luminance());
-        setColor(input1, targetColor);
+        do {
+          targetColor1 = color1.luminance(targetLum);
+          if (input1 == lighterInput)
+            targetLum += 0.001;
+          else
+            targetLum -= 0.001;
+        }
+        while (chroma.contrast(targetColor1, color2) < TARGET_CONTRAST)
+        // console.log('target : ', targetLum);
+        // console.log('color1.luminance() : ', color1.luminance());
+        // console.log('diff : ', targetLum - color1.luminance());
+        setColor(input1, targetColor1);
       }
 
     }
