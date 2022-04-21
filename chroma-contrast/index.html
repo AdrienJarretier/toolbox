@@ -2,137 +2,217 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>chroma.contrast</title>
-    <script src="../extLibs/chroma-2.4.2.min.js"></script>
-    <script src="../extLibs/jquery-3.4.1.min.js"></script>
-    <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>chroma.contrast</title>
+  <script src="../extLibs/chroma-2.4.2.min.js"></script>
+  <script src="../extLibs/jquery-3.4.1.min.js"></script>
+  <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
 
-    <link href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        input {
-            height: 50px;
-            font-size: 1em;
-        }
-    </style>
+  <style>
+    input {
+      height: 50px;
+      font-size: 1em;
+    }
+  </style>
 
 </head>
 
 <body>
 
-    <div class="container">
+  <div class="container">
 
-        <div class="row mt-3">
-            <div class="col">
+    <div class="row mt-3">
+      <div class="col">
 
-                <h3 id="chroma-contrast"><a href="#chroma-contrast">chroma.contrast</a>
-                    <h4 id="-color1-color2-">(color1, color2)</h4>
-                </h3>
-                <p>Computes the WCAG contrast ratio between two colors. A minimum contrast of 4.5:1 <a
-                        href="http://www.w3.org/TR/WCAG20-TECHS/G18.html">is recommended</a> to ensure that text is
-                    still
-                    readable
-                    against a background color.</p>
-
-
-            </div>
-        </div>
+        <h3 id="chroma-contrast"><a href="#chroma-contrast">chroma.contrast</a>
+          <h4 id="-color1-color2-">(color1, color2)</h4>
+        </h3>
+        <p>Computes the WCAG contrast ratio between two colors. A minimum contrast of 4.5:1 <a
+            href="http://www.w3.org/TR/WCAG20-TECHS/G18.html">is recommended</a> to ensure that text is
+          still
+          readable
+          against a background color.</p>
 
 
-        <div class="row">
-            <div class="col-4">
-                <input type="text" id="input1">
-            </div>
-            <div class="col">
-                <input type="text" id="input2">
-            </div>
-        </div>
-
-
-        <div class="row mt-2">
-            <div class="col-4">
-                <button class="btn btn-secondary" id="Brighten-1">Brighten</button>
-            </div>
-            <div class="col">
-                <button class="btn btn-secondary" id="Brighten-2">Brighten</button>
-            </div>
-        </div>
-
-
-        <div class="row mt-2">
-            <div class="col-4">
-                <button class="btn btn-dark" id="Darken-1">Darken</button>
-            </div>
-            <div class="col">
-                <button class="btn btn-dark" id="Darken-2">Darken</button>
-            </div>
-        </div>
-
-
-        <div class="row mt-3">
-            <div class="col">
-
-                <p>Constrast :</p>
-                <div id="resultOutput"></div>
-
-
-            </div>
-        </div>
-
-
+      </div>
     </div>
 
 
-
-    <script>
-
-        function setStyle(inputElement, color) {
-
-            inputElement.css('background-color', color.css());
-
-            if (chroma.contrast(color, 'black') < 4.5)
-                inputElement.css('color', 'white');
-        }
-
-        function getValAsColor(inputElement) {
-
-            const val = inputElement.val().trim();
-            inputElement.val(val);
-
-            return chroma(val);
-        }
-
-        function brightenForContrast(color, refColor) {
+    <div class="row">
+      <div class="col-4">
+        <input type="text" id="input1">
+      </div>
+      <div class="col">
+        <input type="text" id="input2">
+      </div>
+    </div>
 
 
-        }
+    <div class="row mt-2">
+      <div class="col-4">
+        <button class="btn btn-secondary" id="Brighten-1">Brighten</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-secondary" id="Brighten-2">Brighten</button>
+      </div>
+    </div>
 
-        function compute() {
 
-            let input1 = $('#input1');
-            let input2 = $('#input2');
+    <div class="row mt-2">
+      <div class="col-4">
+        <button class="btn btn-dark" id="Darken-1">Darken</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark" id="Darken-2">Darken</button>
+      </div>
+    </div>
 
-            const color1 = getValAsColor(input1);
-            const color2 = getValAsColor(input2);
 
-            setStyle(input1, color1);
-            setStyle(input2, color2);
+    <div class="row mt-3">
+      <div class="col">
 
-            $('#resultOutput').text(chroma.contrast(color1, color2));
-        }
+        <p>Constrast :</p>
+        <div id="resultOutput"></div>
 
-        $('#input1').change(compute);
-        $('#input2').change(compute);
 
-        $('#Brighten-2').click(function(){
-            brightenForContrast(2);
-        });
+      </div>
+    </div>
 
+
+  </div>
+
+
+
+  <script>
+
+    function setStyle(inputElement, color) {
+
+      inputElement.css('background-color', color.css());
+
+      if (chroma.contrast(color, 'black') < 4.5)
+        inputElement.css('color', 'white');
+
+      if (chroma.contrast(color, 'white') < 4.5)
+        inputElement.css('color', 'black');
+    }
+
+    function getValAsColor(inputElement) {
+
+      const val = inputElement.val().trim();
+      inputElement.val(val);
+
+      return chroma(val);
+    }
+
+    function setColor(input, color) {
+      input.val(color.hex());
+      setStyle(input, color);
+    }
+
+    function compute() {
+
+      let input1 = $('#input1');
+      let input2 = $('#input2');
+
+      const color1 = getValAsColor(input1);
+      const color2 = getValAsColor(input2);
+
+      setStyle(input1, color1);
+      setStyle(input2, color2);
+
+      let L1 = color1.luminance();
+      let L2 = color2.luminance();
+      if (L1 < L2) {
+        const tmp = L1;
+        L1 = L2;
+        L2 = tmp;
+      }
+
+      console.log('c1 lum : ', L1);
+      console.log('c2 lum : ', L2);
+      console.log('contrast ratio :', (L1 + 0.05) / (L2 + 0.05));
+      console.log();
+      console.log('target l1 lum : ', 4.5 * (L2 + 0.05) - 0.05);
+      console.log('or');
+      console.log('target l2 lum : ', (L1 + 0.05) / 4.5 - 0.05);
+
+      $('#resultOutput').text(chroma.contrast(color1, color2));
+    }
+
+    $('#input1').change(compute);
+    $('#input2').change(compute);
+
+
+
+    function darkenForContrast(colorNum) {
+
+      const input1 = $('#input' + colorNum);
+      const input2 = $('#input' + (3 - colorNum));
+
+      let color1 = getValAsColor(input1);
+      let color2 = getValAsColor(input2);
+
+      const lum1 = color1.luminance();
+      const lum2 = color2.luminance();
+
+      let darkerInput;
+      let darkerLum;
+      let lighterInput;
+      let lighterLum;
+
+      if (lum1 < lum2) {
+        darkerInput = input1;
+        darkerLum = lum1;
+        lighterInput = input2;
+        lighterLum = lum2;
+      } else {
+        darkerInput = input2;
+        darkerLum = lum2;
+        lighterInput = input1;
+        lighterLum = lum1;
+      }
+
+      const lighterTargetLum = 4.5 * (darkerLum + 0.05) - 0.05;
+      const darkerTargetLum = (lighterLum + 0.05) / 4.5 - 0.05;
+
+      let targetColor;
+
+      if (input1 == lighterInput)
+        targetColor = color1.luminance(lighterTargetLum);
+      else
+        targetColor = color2.luminance(darkerTargetLum);
+
+      setColor(input1, targetColor);
+
+      // input.val(color.darken(0.1).hex());
+
+    }
+
+    function brightenForContrast(colorNum) {
+
+      let input = $('#input' + colorNum);
+      let color = getValAsColor(input);
+      // input.val(color.brighten(0.1).hex());
+
+    }
+
+    for (let i = 1; i < 3; ++i) {
+      $('#Brighten-' + i).click(function () {
+        brightenForContrast(i);
         compute();
+      });
+      $('#Darken-' + i).click(function () {
+        darkenForContrast(i);
+        compute();
+      });
+    }
 
-    </script>
+    compute();
+
+  </script>
 
 
 </body>
