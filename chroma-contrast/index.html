@@ -11,11 +11,25 @@
   <script src="../extLibs/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
 
   <link href="../extLibs/bootstrap-5.0.2-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../extLibs/bootstrap-icons-1.8.1/bootstrap-icons.css">
 
   <style>
     input {
       height: 50px;
       font-size: 1em;
+    }
+
+    input[type="checkbox"] {
+      width: 25px;
+      height: 30px;
+    }
+
+    #rowLockedRGB label {
+      width: 25px;
+    }
+
+    #rowLockedRGB {
+      text-align: center;
     }
   </style>
 
@@ -28,7 +42,7 @@
     <div class="row mt-3">
       <div class="col">
 
-        <h3 id="chroma-contrast"><a href="#chroma-contrast">chroma.contrast</a>
+        <h3 id="chroma-contrast"><a href="https://gka.github.io/chroma.js/#chroma-contrast">chroma.contrast</a>
           <h4 id="-color1-color2-">(color1, color2)</h4>
         </h3>
         <p>Computes the WCAG contrast ratio between two colors. A minimum contrast of 4.5:1 <a
@@ -36,6 +50,15 @@
           still
           readable
           against a background color.</p>
+
+        In order to be Level AA conformant, your page must have all of the
+        following:
+
+        <ul>
+          <li>A 4.5:1 contrast between the non-link text color and the background.</li>
+          <li>A 4.5:1 contrast between the link text color and the background.</li>
+          <li>A 3:1 contrast between the link text color and the surrounding non-link text color.</li>
+        </ul>
 
       </div>
     </div>
@@ -51,7 +74,60 @@
     </div>
 
 
-    <div class="row mt-2">
+    <div class="row my-2" id="rowLockedRGB">
+      <div class="col-4">
+        <div class="row">
+
+          <div class="col-2">
+            <i class="bi-file-lock2" style="font-size: 1.5rem;"></i>
+          </div>
+
+          <div class="col">
+            <div class="row">
+              <div class="col-3"><label for="lockedRGB-R-1">R</label></div>
+              <div class="col-3"><label for="lockedRGB-G-1">G</label></div>
+              <div class="col-3"><label for="lockedRGB-B-1">B</label></div>
+            </div>
+            <div class="row">
+              <div class="col-3"><input type="checkbox" id="lockedRGB-R-1"></div>
+              <div class="col-3"><input type="checkbox" id="lockedRGB-G-1"></div>
+              <div class="col-3"><input type="checkbox" id="lockedRGB-B-1"></div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="row">
+
+          <div class="col-2">
+            <i class="bi-file-lock2" style="font-size: 1.5rem;"></i>
+          </div>
+
+          <div class="col">
+            <div class="row">
+              <div class="col-3"><label for="lockedRGB-R-2">R</label></div>
+              <div class="col-3"><label for="lockedRGB-G-2">G</label></div>
+              <div class="col-3"><label for="lockedRGB-B-2">B</label></div>
+            </div>
+            <div class="row">
+              <div class="col-3"><input type="checkbox" id="lockedRGB-R-2"></div>
+              <div class="col-3"><input type="checkbox" id="lockedRGB-G-2"></div>
+              <div class="col-3"><input type="checkbox" id="lockedRGB-B-2"></div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="row">
       <div class="col-4">
         <a tabindex="0" class="btn btn-secondary" id="FixForContrast-1">Fix for contrast</a>
       </div>
@@ -162,7 +238,7 @@
         if (0 > targetLum || targetLum > 1) {
 
           popover.show();
-          setTimeout(() => popover.hide(), 1000);
+          setTimeout(() => popover.hide(), 2000);
         }
         else {
 
@@ -182,10 +258,19 @@
       }
     }
 
+
     $('#input1').change(compute);
     $('#input2').change(compute);
 
     for (let i = 1; i < 3; ++i) {
+
+      for (let colorComp of 'RGB') {
+        const id = 'lockedRGB-' + colorComp + '-' + i;
+        console.log(id);
+        $('#' + id).change(function () {
+          console.log('checked ', $(this));
+        });
+      }
 
       fixButton = $('#FixForContrast-' + i);
 
