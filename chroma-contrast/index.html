@@ -63,14 +63,20 @@
       </div>
     </div>
 
-
     <div class="row">
       <div class="col-4">
         <input type="color" id="colorInput1" value="#ffffff">
-        <input type="text" id="input1">
       </div>
       <div class="col">
         <input type="color" id="colorInput2" value="#ffffff">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <input type="text" id="input1">
+      </div>
+      <div class="col">
         <input type="text" id="input2">
       </div>
     </div>
@@ -153,19 +159,18 @@
 
   <script>
 
-    let color1 = chroma('white');
-    let color2 = chroma('white');
+    let colors = [null, chroma('white'), chroma('white')];
+    const colorInputs = [null];
+    const textInputs = [null];
+    const textInputsFormat = [null];
 
-    let colorInput1 = $('#colorInput1');
-    let colorInput2 = $('#colorInput2');
-    let input1 = $('#input1');
-    let input2 = $('#input2');
+    for (let i = 1; i <= 2; ++i) {
+      colorInputs.push($('#colorInput' + i));
+      textInputs.push($('#input' + i));
+      textInputsFormat.push('hex');
+    }
 
-    let colors = [null, color1, color2];
-    const colorInputs = [null, colorInput1, colorInput2];
-    const textInputs = [null, input1, input2];
-
-    function setStyle(inputElement, color) {
+    function viewSetStyle(inputElement, color) {
 
       inputElement.css('background-color', color.css());
 
@@ -176,26 +181,58 @@
         inputElement.css('color', 'black');
     }
 
+    function getColorAsText(colorNum) {
+      switch (textInputsFormat[colorNum]) {
+        case 'hex':
+          return colors[colorNum].hex();
+        case 'hsl':
+          return colors[colorNum].hsl();
+        case 'name':
+          return colors[colorNum].name();
+        case 'rgb':
+          return 'rgb(' + colors[colorNum].rgb() + ')';
+      }
+    }
+
+    function viewSetColor(colorNum) {
+      colorInputs[colorNum].val(colors[colorNum].hex());
+      textInputs[colorNum].val(getColorAsText(colorNum));
+    }
+
     function controlerViewSetColor(color, colorNum) {
 
-      colorInputs[colorNum].val(color.hex());
-      textInputs[colorNum].val(color.hex());
-
-      setStyle(textInputs[colorNum], color);
+      viewSetColor(colorNum);
+      viewSetStyle(textInputs[colorNum], color);
     }
 
     function modelStoreColor(color, colorNum) {
-
       colors[colorNum] = color;
       controlerViewSetColor(color, colorNum);
     }
 
-    function controlerInputReadAndStoreColor(element) {
+    function getFormat(colorText) {
 
+      if (colorText.startsWith('#'))
+        return 'hex';
+      if (colorText.startsWith('hsl'))
+        return 'hsl';
+      if (colorText.startsWith('rgb'))
+        return 'rgb';
+
+      return 'name';
+    }
+
+    function modelSetColorTextFormat(format, colorNum) {
+      textInputsFormat[colorNum] = format;
+    }
+
+    function controlerInputReadAndStoreColor(element) {
       const colorNum = element.attr('id').slice(-1);
       const val = element.val();
-      if (chroma.valid(val))
+      if (chroma.valid(val)) {
+        modelSetColorTextFormat(getFormat(val), colorNum);
         modelStoreColor(chroma(val), colorNum);
+      }
     }
 
     function getColors() {
@@ -211,11 +248,6 @@
 
       if (chroma.valid(val2))
         color2 = chroma(val2);
-    }
-
-    function setColor(input, color) {
-      input.val(color.hex());
-      setStyle(input, color);
     }
 
     function compute() {
@@ -315,29 +347,31 @@
       colorInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
       textInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
 
-      for (let colorComp of 'RGB') {
-        const id = 'lockedRGB-' + colorComp + '-' + i;
-        // console.log(id);
-        $('#' + id).change(function () {
-          console.log('checked ', $(this));
-        });
-      }
+      controlerInputReadAndStoreColor(textInputs[i]);
 
-      fixButton = $('#FixForContrast-' + i);
+      // for (let colorComp of 'RGB') {
+      //   const id = 'lockedRGB-' + colorComp + '-' + i;
+      //   // console.log(id);
+      //   $('#' + id).change(function () {
+      //     console.log('checked ', $(this));
+      //   });
+      // }
 
-      const popover = new bootstrap.Popover(fixButton, {
-        content: 'Cannot reach 4.5:1 contrast'
-        , trigger: 'manual'
-      });
+      // fixButton = $('#FixForContrast-' + i);
 
-      fixButton.click(function () {
-        fixForContrast(i, popover);
-        compute();
-      });
+      // const popover = new bootstrap.Popover(fixButton, {
+      //   content: 'Cannot reach 4.5:1 contrast'
+      //   , trigger: 'manual'
+      // });
+
+      // fixButton.click(function () {
+      //   fixForContrast(i, popover);
+      //   compute();
+      // });
 
     }
 
-    compute();
+    // compute();
 
   </script>
 
