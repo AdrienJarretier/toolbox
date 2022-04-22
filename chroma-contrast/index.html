@@ -231,6 +231,10 @@
       controlerViewOutputContrast();
     }
 
+    function controllerModelStoreColor(color, colorNum) {
+      modelStoreColor(color, colorNum);
+    }
+
     function getFormat(colorText) {
 
       if (colorText.startsWith('#'))
@@ -251,7 +255,7 @@
       const colorNum = element.attr('id').slice(-1);
       const val = element.val();
       if (chroma.valid(val)) {
-        modelStoreColor(chroma(val), colorNum);
+        controllerModelStoreColor(chroma(val), colorNum);
       }
     }
 
@@ -280,10 +284,20 @@
     }
 
 
+    function modelGetColor(colorNum) {
+      return colors[colorNum];
+    }
 
+
+    function controllerModelGetColor(colorNum) {
+      return modelGetColor(colorNum);
+    }
 
 
     function fixForContrast(colorNum, popover) {
+
+      const color1 = controllerModelGetColor(1);
+      const color2 = controllerModelGetColor(2);
 
       let localInput1, localInput2, localColor1, localColor2;
       if (colorNum == 2) {
@@ -352,6 +366,7 @@
           // console.log('color1.luminance() : ', color1.luminance());
           // console.log('diff : ', targetLum - color1.luminance());
           setColor(localInput1, targetColor1);
+          controllerModelStoreColor(targetColor1, colorNum);
         }
       }
     }
@@ -381,17 +396,16 @@
       //   });
       // }
 
-      // fixButton = $('#FixForContrast-' + i);
+      fixButton = $('#FixForContrast-' + i);
 
-      // const popover = new bootstrap.Popover(fixButton, {
-      //   content: 'Cannot reach 4.5:1 contrast'
-      //   , trigger: 'manual'
-      // });
+      const popover = new bootstrap.Popover(fixButton, {
+        content: 'Cannot reach 4.5:1 contrast'
+        , trigger: 'manual'
+      });
 
-      // fixButton.click(function () {
-      //   fixForContrast(i, popover);
-      //   compute();
-      // });
+      fixButton.click(function () {
+        fixForContrast(i, popover);
+      });
 
     }
 
