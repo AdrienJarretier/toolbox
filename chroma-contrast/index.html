@@ -161,10 +161,10 @@
 
       inputElement.css('background-color', color.css());
 
-      if (chroma.contrast(color, 'black') < 4.5)
+      if (chroma.contrast(color, 'black') < 4.5 || color.alpha() > 0.5)
         inputElement.css('color', 'white');
 
-      if (chroma.contrast(color, 'white') < 4.5)
+      if (chroma.contrast(color, 'white') < 4.5 || color.alpha() < 0.5)
         inputElement.css('color', 'black');
     }
 
@@ -263,8 +263,8 @@
     }
 
 
-    input1.change(compute);
-    input2.change(compute);
+    input1.on('input', compute);
+    input2.on('input', compute);
 
     for (let i = 1; i < 3; ++i) {
 
