@@ -299,20 +299,8 @@
       const color1 = controllerModelGetColor(1);
       const color2 = controllerModelGetColor(2);
 
-      let localInput1, localInput2, localColor1, localColor2;
-      if (colorNum == 2) {
-        localInput1 = input2;
-        localInput2 = input1;
-
-        localColor1 = color2;
-        localColor2 = color1;
-      } else {
-        localInput1 = input1;
-        localInput2 = input2;
-
-        localColor1 = color1;
-        localColor2 = color2;
-      }
+      const localColor1 = controllerModelGetColor(colorNum);
+      const localColor2 = controllerModelGetColor(3 - colorNum);
 
       const TARGET_CONTRAST = 4.5;
       if (chroma.contrast(localColor1, localColor2) < TARGET_CONTRAST) {
@@ -320,20 +308,16 @@
         const lum1 = localColor1.luminance();
         const lum2 = localColor2.luminance();
 
-        let darkerInput;
         let darkerLum;
-        let lighterInput;
         let lighterLum;
 
         if (lum1 < lum2) {
-          darkerInput = localInput1;
+          lighterLocalColorNum = 2;
           darkerLum = lum1;
-          lighterInput = localInput2;
           lighterLum = lum2;
         } else {
-          darkerInput = localInput2;
+          lighterLocalColorNum = 1;
           darkerLum = lum2;
-          lighterInput = localInput1;
           lighterLum = lum1;
         }
 
@@ -342,7 +326,7 @@
 
         let targetLum;
 
-        if (localInput1 == lighterInput)
+        if (lighterLocalColorNum == 1)
           targetLum = lighterTargetLum;
         else
           targetLum = darkerTargetLum;
@@ -356,7 +340,7 @@
 
           do {
             targetColor1 = localColor1.luminance(targetLum);
-            if (localInput1 == lighterInput)
+            if (lighterLocalColorNum == 1)
               targetLum += 0.001;
             else
               targetLum -= 0.001;
@@ -365,7 +349,7 @@
           // console.log('target : ', targetLum);
           // console.log('color1.luminance() : ', color1.luminance());
           // console.log('diff : ', targetLum - color1.luminance());
-          setColor(localInput1, targetColor1);
+
           controllerModelStoreColor(targetColor1, colorNum);
         }
       }
