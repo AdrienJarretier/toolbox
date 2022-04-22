@@ -198,19 +198,32 @@
       $('#resultOutput').text(chroma.contrast(color1, color2));
     }
 
+
+
+
+
     function fixForContrast(colorNum, popover) {
 
-      const input1 = $('#input' + colorNum);
-      const input2 = $('#input' + (3 - colorNum));
+      let localInput1, localInput2, localColor1, localColor2;
+      if (colorNum == 2) {
+        localInput1 = input2;
+        localInput2 = input1;
 
-      let color1 = getValAsColor(input1);
-      let color2 = getValAsColor(input2);
+        localColor1 = color2;
+        localColor2 = color1;
+      } else {
+        localInput1 = input1;
+        localInput2 = input2;
+
+        localColor1 = color1;
+        localColor2 = color2;
+      }
 
       const TARGET_CONTRAST = 4.5;
-      if (chroma.contrast(color1, color2) < TARGET_CONTRAST) {
+      if (chroma.contrast(localColor1, localColor2) < TARGET_CONTRAST) {
 
-        const lum1 = color1.luminance();
-        const lum2 = color2.luminance();
+        const lum1 = localColor1.luminance();
+        const lum2 = localColor2.luminance();
 
         let darkerInput;
         let darkerLum;
@@ -218,14 +231,14 @@
         let lighterLum;
 
         if (lum1 < lum2) {
-          darkerInput = input1;
+          darkerInput = localInput1;
           darkerLum = lum1;
-          lighterInput = input2;
+          lighterInput = localInput2;
           lighterLum = lum2;
         } else {
-          darkerInput = input2;
+          darkerInput = localInput2;
           darkerLum = lum2;
-          lighterInput = input1;
+          lighterInput = localInput1;
           lighterLum = lum1;
         }
 
@@ -234,7 +247,7 @@
 
         let targetLum;
 
-        if (input1 == lighterInput)
+        if (localInput1 == lighterInput)
           targetLum = lighterTargetLum;
         else
           targetLum = darkerTargetLum;
@@ -247,20 +260,27 @@
         else {
 
           do {
-            targetColor1 = color1.luminance(targetLum);
-            if (input1 == lighterInput)
+            targetColor1 = localColor1.luminance(targetLum);
+            if (localInput1 == lighterInput)
               targetLum += 0.001;
             else
               targetLum -= 0.001;
           }
-          while (chroma.contrast(targetColor1, color2) < TARGET_CONTRAST)
+          while (chroma.contrast(targetColor1, localColor2) < TARGET_CONTRAST)
           // console.log('target : ', targetLum);
           // console.log('color1.luminance() : ', color1.luminance());
           // console.log('diff : ', targetLum - color1.luminance());
-          setColor(input1, targetColor1);
+          setColor(localInput1, targetColor1);
         }
       }
     }
+
+
+
+
+
+
+
 
 
     input1.on('input', compute);
