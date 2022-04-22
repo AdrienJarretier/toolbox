@@ -151,10 +151,11 @@
 
   <script>
 
-    // var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-    // var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-    //   return new bootstrap.Popover(popoverTriggerEl)
-    // })
+    let color1 = chroma('white');
+    let color2 = chroma('white');
+
+    let input1 = $('#input1');
+    let input2 = $('#input2');
 
     function setStyle(inputElement, color) {
 
@@ -167,12 +168,19 @@
         inputElement.css('color', 'black');
     }
 
-    function getValAsColor(inputElement) {
+    function getColors(inputElement) {
 
-      const val = inputElement.val().trim();
-      inputElement.val(val);
+      const val1 = input1.val().trim();
+      const val2 = input2.val().trim();
 
-      return chroma(val);
+      input1.val(val1);
+      input2.val(val2);
+
+      if (chroma.valid(val1))
+        color1 = chroma(val1);
+
+      if (chroma.valid(val2))
+        color2 = chroma(val2);
     }
 
     function setColor(input, color) {
@@ -182,11 +190,7 @@
 
     function compute() {
 
-      let input1 = $('#input1');
-      let input2 = $('#input2');
-
-      const color1 = getValAsColor(input1);
-      const color2 = getValAsColor(input2);
+      getColors();
 
       setStyle(input1, color1);
       setStyle(input2, color2);
@@ -259,14 +263,14 @@
     }
 
 
-    $('#input1').change(compute);
-    $('#input2').change(compute);
+    input1.change(compute);
+    input2.change(compute);
 
     for (let i = 1; i < 3; ++i) {
 
       for (let colorComp of 'RGB') {
         const id = 'lockedRGB-' + colorComp + '-' + i;
-        console.log(id);
+        // console.log(id);
         $('#' + id).change(function () {
           console.log('checked ', $(this));
         });
