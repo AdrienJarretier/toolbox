@@ -66,9 +66,11 @@
 
     <div class="row">
       <div class="col-4">
+        <input type="color" id="colorInput1" value="#ffffff">
         <input type="text" id="input1">
       </div>
       <div class="col">
+        <input type="color" id="colorInput2" value="#ffffff">
         <input type="text" id="input2">
       </div>
     </div>
@@ -154,8 +156,14 @@
     let color1 = chroma('white');
     let color2 = chroma('white');
 
+    let colorInput1 = $('#colorInput1');
+    let colorInput2 = $('#colorInput2');
     let input1 = $('#input1');
     let input2 = $('#input2');
+
+    let colors = [null, color1, color2];
+    const colorInputs = [null, colorInput1, colorInput2];
+    const textInputs = [null, input1, input2];
 
     function setStyle(inputElement, color) {
 
@@ -168,7 +176,29 @@
         inputElement.css('color', 'black');
     }
 
-    function getColors(inputElement) {
+    function controlerViewSetColor(color, colorNum) {
+
+      colorInputs[colorNum].val(color.hex());
+      textInputs[colorNum].val(color.hex());
+
+      setStyle(textInputs[colorNum], color);
+    }
+
+    function modelStoreColor(color, colorNum) {
+
+      colors[colorNum] = color;
+      controlerViewSetColor(color, colorNum);
+    }
+
+    function controlerInputReadAndStoreColor(element) {
+
+      const colorNum = element.attr('id').slice(-1);
+      const val = element.val();
+      if (chroma.valid(val))
+        modelStoreColor(chroma(val), colorNum);
+    }
+
+    function getColors() {
 
       const val1 = input1.val().trim();
       const val2 = input2.val().trim();
@@ -280,13 +310,10 @@
 
 
 
-
-
-
-    input1.on('input', compute);
-    input2.on('input', compute);
-
     for (let i = 1; i < 3; ++i) {
+
+      colorInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
+      textInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
 
       for (let colorComp of 'RGB') {
         const id = 'lockedRGB-' + colorComp + '-' + i;
