@@ -153,6 +153,12 @@
 
       </div>
     </div>
+
+    <div class="row my-5">
+      <div class="col">
+      </div>
+    </div>
+
   </div>
 
 
@@ -182,11 +188,16 @@
     }
 
     function getColorAsText(colorNum) {
+
       switch (textInputsFormat[colorNum]) {
         case 'hex':
           return colors[colorNum].hex();
         case 'hsl':
-          return colors[colorNum].hsl();
+          const hslComps = colors[colorNum].hsl();
+          return 'hsl('
+            + Math.round((hslComps[0] ? hslComps[0] : 0) * 10) / 10 + ','
+            + Math.round(hslComps[1] * 1000) / 10 + '%,'
+            + Math.round(hslComps[2] * 1000) / 10 + '%)';
         case 'name':
           return colors[colorNum].name();
         case 'rgb':
@@ -205,9 +216,19 @@
       viewSetStyle(textInputs[colorNum], color);
     }
 
+
+    function viewOutputContrast(contrastText) {
+      $('#resultOutput').text(contrastText);
+    }
+
+    function controlerViewOutputContrast() {
+      viewOutputContrast(chroma.contrast(colors[1], colors[2]));
+    }
+
     function modelStoreColor(color, colorNum) {
       colors[colorNum] = color;
       controlerViewSetColor(color, colorNum);
+      controlerViewOutputContrast();
     }
 
     function getFormat(colorText) {
@@ -230,8 +251,16 @@
       const colorNum = element.attr('id').slice(-1);
       const val = element.val();
       if (chroma.valid(val)) {
-        modelSetColorTextFormat(getFormat(val), colorNum);
         modelStoreColor(chroma(val), colorNum);
+      }
+    }
+
+    function controlerInputReadAndStoreFormat(element) {
+
+      const colorNum = element.attr('id').slice(-1);
+      const val = element.val();
+      if (chroma.valid(val)) {
+        modelSetColorTextFormat(getFormat(val), colorNum);
       }
     }
 
@@ -248,16 +277,6 @@
 
       if (chroma.valid(val2))
         color2 = chroma(val2);
-    }
-
-    function compute() {
-
-      getColors();
-
-      setStyle(input1, color1);
-      setStyle(input2, color2);
-
-      $('#resultOutput').text(chroma.contrast(color1, color2));
     }
 
 
@@ -344,9 +363,14 @@
 
     for (let i = 1; i < 3; ++i) {
 
-      colorInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
-      textInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)) });
+      colorInputs[i].on('input', function () { controlerInputReadAndStoreColor($(this)); });
 
+      textInputs[i].on('input', function () {
+        controlerInputReadAndStoreFormat($(this));
+        controlerInputReadAndStoreColor($(this));
+      });
+
+      controlerInputReadAndStoreFormat(textInputs[i]);
       controlerInputReadAndStoreColor(textInputs[i]);
 
       // for (let colorComp of 'RGB') {
