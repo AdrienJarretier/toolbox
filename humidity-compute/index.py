@@ -7,11 +7,11 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH = 63.3
-currentTemp = 23.2
+currentRH = 62
+currentTemp = 22.6
 
-tmpRH = 56
-tmpTemp = 19.2
+tmpRH = 62
+tmpTemp = 22.6
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -96,16 +96,18 @@ rh_whenReturning_tempBeforeOpening_times_hundred = round(
 #                   rh_whenReturning_tempBeforeOpening_times_hundred, '% at', currentTemp, 'C')
 
 
+TARGET_RH_TIMES_HUNDRED = 38
+
 print()
 print('temperature before opening windows :', tempBeforeOpening)
 print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
-print('target temp with',rhBeforeOpening,'% RH for 50% RH when returning at', tempBeforeOpening, ':',
-      ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening, 50)*10)/10)
+print('target temp with',rhBeforeOpening,'% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
+      ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening, TARGET_RH_TIMES_HUNDRED)*10)/10)
 print()
 print('RH at', tempBeforeOpening, ':', rh_whenReturning_tempBeforeOpening_times_hundred)
 print()
-print('target temp with',tmpRH,'% RH for 50% RH when returning at', tempBeforeOpening, ':',
-      ceil(computeLowTempTarget(tempBeforeOpening, tmpRH, 50)*10)/10)
+print('target temp with',tmpRH,'% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
+      ceil(computeLowTempTarget(tempBeforeOpening, tmpRH, TARGET_RH_TIMES_HUNDRED)*10)/10)
