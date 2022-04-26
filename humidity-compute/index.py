@@ -104,10 +104,11 @@ print()
 print('currentRH :', tmpRH)
 print('currentTemp :', tmpTemp)
 print()
-print('target temp with',rhBeforeOpening,'% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
+print('target temp with', rhBeforeOpening, '% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
       ceil(computeLowTempTarget(tempBeforeOpening, rhBeforeOpening, TARGET_RH_TIMES_HUNDRED)*10)/10)
 print()
-print('RH at', tempBeforeOpening, ':', rh_whenReturning_tempBeforeOpening_times_hundred)
+print('RH at', tempBeforeOpening, ':',
+      rh_whenReturning_tempBeforeOpening_times_hundred)
 print()
-print('target temp with',tmpRH,'% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
+print('target temp with', tmpRH, '% RH for '+str(TARGET_RH_TIMES_HUNDRED)+'% RH when returning at', tempBeforeOpening, ':',
       ceil(computeLowTempTarget(tempBeforeOpening, tmpRH, TARGET_RH_TIMES_HUNDRED)*10)/10)
