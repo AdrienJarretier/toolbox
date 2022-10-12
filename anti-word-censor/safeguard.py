@@ -37,7 +37,7 @@ def safeguardWord(word):
 
 
 funnyStrings = [
-    '♥censored-for-fragile-spirits-easily-offended♥',
+    '♥censored-for-delicate-spirits♥'
     '♥censored-for-love♥',
     '♥this-is-not-a-bypass-of-the-censorship-filter♥',
     '♥censored-because-depth-of-vocabulary-is-overrated♥',
@@ -78,7 +78,7 @@ def safeguardFile(filename):
     print(inFilePath)
     print(outFilePath)
 
-    with open(inFilePath) as inFile:
+    with open(inFilePath, encoding="utf-8") as inFile:
 
         with open(outFilePath, 'w', encoding="utf-8") as outFile:
 
