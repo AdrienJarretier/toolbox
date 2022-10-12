@@ -140,8 +140,11 @@ while restartMenu:
             surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
             missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
 
+            print('\n## Orbital speed at', targetAltitude, 'm :', thousandSeparated(
+                round(orbitalSpeed(centralBody, targetAltitude, targetAltitude))), 'm/s')
+
             if initialAltitude == 0:
-                print('\n## delta V from ground to Stationary altitude :',
+                print('\n## delta V from ground to target altitude :',
                       thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
             else:
                 print('\n## delta V :', thousandSeparated(
