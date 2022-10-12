@@ -18,6 +18,7 @@ from consolemenu.menu_component import Dimension
 
 from KspBody import KspBody
 from orbitalPeriod import stationaryAltitude
+from orbitalSpeed import orbitalSpeed
 from requiredDeltaVForOrbit import getDeltavFromInitialOrbitToTarget, inclinationChangeDeltaV
 from utils import removeThousandSeparator, thousandSeparated
 
@@ -84,11 +85,11 @@ while restartMenu:
     if menu.selected_item == menu.exit_item:
         restartMenu = False
 
-    def getSelectedBody():
+    def getSelectedBody() -> KspBody:
         selectedBody = bodiesList[bodiesSelectionMenu.selected_option]
         return KspBody.bodies[selectedBody]
 
-    def itemSelected(selectionMenu: SelectionMenu):
+    def itemSelected(selectionMenu: SelectionMenu) -> bool:
         global restartMenu
         if selectionMenu.selected_item != selectionMenu.exit_item:
             restartMenu = False
@@ -103,8 +104,12 @@ while restartMenu:
             print('## Stationary altitude around '+centralBody.name+' : ',
                   thousandSeparated(round(altitude)), 'meters')
 
-            print('## delta V from 0 to Stationary altitude :', thousandSeparated(
-                round(getDeltavFromInitialOrbitToTarget(centralBody, 0, altitude, 0))), 'm/s')
+            transferDeltaV = getDeltavFromInitialOrbitToTarget(centralBody, 0, altitude, 0)
+            surfaceOrbitalSpeed = orbitalSpeed(centralBody, altitude, altitude)
+            missingSpeedToOrbit = max(surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed(),0)
+
+            print('## delta V from ground to Stationary altitude :',
+            thousandSeparated(round( missingSpeedToOrbit+transferDeltaV )), 'm/s')
 
     if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):

@@ -7,10 +7,18 @@ def semiMajorAxis(centralBody, apoapsisAltitude, periapsisAltitude):
     return ((apoapsisAltitude+periapsisAltitude)/2) + centralBody.radius
 
 
-# apoapsisAltitude periapsisAltitude  in meters from surface
-# optional : currentAltitude in meters from surface, if ommited, compute speed from an assumed circular orbit at an average altitude
-# returns Speed in meters / second
-def orbitalSpeed(centralBody, apoapsisAltitude, periapsisAltitude, currentAltitude=None):
+def orbitalSpeed(centralBody:KspBody, apoapsisAltitude:float, periapsisAltitude:float, currentAltitude:float=None)->float:
+    """
+    Compute orbital speed at a given altitude on the given orbit around the given body
+
+    Args:
+        centralBody: The orbited body.
+        apoapsisAltitude, periapsisAltitude : altitudes in meters
+        currentAltitude: OPTIONAL, in meters from surface, if ommited, compute speed from an assumed circular orbit at an average altitude
+
+    Returns:
+        float: orbital speed in m/s at the current altitude
+    """
 
     a = semiMajorAxis(centralBody, apoapsisAltitude, periapsisAltitude)
 

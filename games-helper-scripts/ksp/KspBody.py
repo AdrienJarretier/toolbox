@@ -1,4 +1,6 @@
+import math
 from scipy.constants import G
+
 
 class KspBody:
 
@@ -23,6 +25,17 @@ class KspBody:
         self.standardGravitationalParameter = G * self.mass
 
         self.bodies[name] = self
+
+    def surfaceLinearSpeed(self) -> float:
+        """
+        Compute surface linear speed from radius and rotation Period
+
+        Returns :
+            float: the surface linear speed in meters/sec
+        """
+        circumference = 2*math.pi*self.radius
+        return circumference/self.rotationPeriod
+
 
 KspBody("kerbin", 5.2915158e22, 600e3, 21549.425, None)
 KspBody("mun", 9.76e20, 200e3, 138984.38, 2429559.1)
