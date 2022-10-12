@@ -121,7 +121,7 @@ while restartMenu:
             periapsisAltitude = float(removeThousandSeparator(
                 input('Periapsis Altitude (meters) : ')))
             print('\n## delta V :', round(inclinationChangeDeltaV(
-                centralBody, apoapsisAltitude, periapsisAltitude, angle), 'm/s'))
+                centralBody, apoapsisAltitude, periapsisAltitude, angle)), 'm/s')
 
 
 # print(mainMenuSelection)

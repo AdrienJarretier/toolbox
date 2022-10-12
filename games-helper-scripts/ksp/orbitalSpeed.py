@@ -32,4 +32,4 @@ def orbitalSpeed(centralBody:KspBody, apoapsisAltitude:float, periapsisAltitude:
     return (mu*(2/r-1/a))**(0.5)
 
 
-print(orbitalSpeed(KspBody.bodies['kerbin'], 80000,80000))
+# print(orbitalSpeed(KspBody.bodies['kerbin'], 80000,80000))
