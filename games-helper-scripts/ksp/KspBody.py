@@ -4,6 +4,11 @@ class KspBody:
 
     bodies = {}
 
+    # return bodies names as a list
+    @classmethod
+    def bodiesList(cls):
+        return list(cls.bodies.keys())
+
     # mass in kg
     # radius in meters
     # rotationPeriod (sidereal rotation) in seconds

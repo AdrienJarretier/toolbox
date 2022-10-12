@@ -7,8 +7,9 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH = 84
-currentTemp = 25.1
+currentRH = 75
+currentTemp = 24.6
+
 
 
 TARGET_RH_TIMES_HUNDRED = 50
