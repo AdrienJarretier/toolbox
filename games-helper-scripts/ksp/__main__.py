@@ -107,13 +107,8 @@ while restartMenu:
             print('## Stationary altitude around '+centralBody.name+' : ',
                   thousandSeparated(round(altitude)), 'meters')
 
-            transferDeltaV = getDeltavFromInitialOrbitToTarget(
-                centralBody, 0, altitude, 0)
-            surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
-            missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
-
-            print('## delta V from ground to Stationary altitude :',
-                  thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
+            deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(centralBody, centralBody.atmoHeight, altitude, 0)
+            print('## delta V from ground to Stationary altitude :', thousandSeparated(round(centralBody.reachingSpaceCompute()['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s')
 
     if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):
@@ -144,7 +139,7 @@ while restartMenu:
             targetOrbitalSpeed = orbitalSpeed(
                 centralBody, targetAltitude, targetAltitude)
 
-            print('\n## Orbital speed at', targetAltitude, 'm :', thousandSeparated(
+            print('\n## Orbital speed at', thousandSeparated(int(targetAltitude)), 'm :', thousandSeparated(
                 round(targetOrbitalSpeed)), 'm/s')
 
             if initialAltitude == 0:
@@ -152,27 +147,25 @@ while restartMenu:
                 print('\natmosphere height :', centralBody.atmoHeight, 'm')
                 print('acceleration assuming 2 TWR :',
                       g, 'm/s²')
-                timeToReachSpace = math.sqrt(2*centralBody.atmoHeight/g)
-                deltaVtoReachSpace = g*timeToReachSpace
-                speedUponReachingSpace = deltaVtoReachSpace+centralBody.surfaceLinearSpeed()
+
+                reachingSpaceComputation = centralBody.reachingSpaceCompute()
+                timeToReachSpace = reachingSpaceComputation['timeToReach']
+                deltaVtoReachSpace = reachingSpaceComputation['deltaVToReach']
+                speedUponReachingSpace = reachingSpaceComputation['speedUponReachingSpace']
+                wasteddeltaV = reachingSpaceComputation['wasteddeltaV']
                 print('timeToReachSpace :', round(timeToReachSpace), 's')
                 print('speedUponReachingSpace :', round(
                     speedUponReachingSpace), 'm/s')
-                wasteddeltaV = g*timeToReachSpace
                 print('wasted delta V :', round(wasteddeltaV), 'm/s')
 
-                # surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
-                # missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
-                missingSpeed = orbitalSpeed(centralBody, centralBody.atmoHeight, centralBody.atmoHeight) - speedUponReachingSpace
-
                 deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(centralBody, centralBody.atmoHeight, targetAltitude, inclinationChange)
-                print('\ndelta V from space edge to target :', deltaVToFinalTarget)
+                print('\ndelta V from space edge to target :', thousandSeparated(round(deltaVToFinalTarget)), 'm/s')
                 print('\n## delta V from ground to target altitude :',
-                      thousandSeparated(round(missingSpeed + wasteddeltaV + deltaVtoReachSpace + deltaVToFinalTarget)), 'm/s')
+                      thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s')
 
             else:
                 print('\n## delta V :', thousandSeparated(
-                    round(transferDeltaV)), 'm/s')
+                    round(getDeltavFromInitialOrbitToTarget(centralBody,initialAltitude,targetAltitude,inclinationChange))), 'm/s')
 
 
 # print(mainMenuSelection)
