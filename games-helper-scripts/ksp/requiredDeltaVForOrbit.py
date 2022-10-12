@@ -47,7 +47,18 @@ def transferDeltaV(centralBody, origApoapsis, origPeriapsis, targetApoapsis, tar
 # altitudes in meters
 # angle in degrees
 # returns deltaV in meters / second
-def inclinationChangeDeltaV(centralBody, apoapsisAltitude, periapsisAltitude, angle):
+def inclinationChangeDeltaV(centralBody: KspBody, apoapsisAltitude: float, periapsisAltitude: float, angle: float) -> float:
+    """
+    Compute Delta V required to change inclination of an orbit
+
+    Args:
+        centralBody: The orbited body.
+        apoapsisAltitude, periapsisAltitude : altitudes in meters
+        angle : in degrees
+
+    Returns:
+        float: deltaV in meters / second
+    """
 
     angle = angle * math.pi / 180
 
@@ -60,18 +71,31 @@ def inclinationChangeDeltaV(centralBody, apoapsisAltitude, periapsisAltitude, an
 
 # altitudes in meters
 # returns deltaV in meters / second including a 10 % margin
-def getDeltavFromInitialOrbitToTarget(centralBody, initialAltitude, targetAltitude, inclinationChange):
+def getDeltavFromInitialOrbitToTarget(centralBody: KspBody, initialAltitude: float, targetAltitude: float, inclinationChange: float) -> float:
+    """
+    Compute Delta V required to go from one initial orbit altitude to another (assuming circular)
+
+    Args:
+        centralBody: The orbited body.
+        initialAltitude, targetAltitude : altitudes in meters
+        inclinationChange : in degrees
+
+    Returns:
+        float: deltaV in meters / second
+    """
 
     # return orbitalSpeed(centralBody, 0, 0)+transferDeltaV(centralBody, 0, 0, apopasis, periapsis)
 
-    return (transferDeltaV(centralBody, initialAltitude, initialAltitude, targetAltitude, targetAltitude) \
-        + inclinationChangeDeltaV(centralBody,
-                                  max(initialAltitude, targetAltitude), max(initialAltitude, targetAltitude), inclinationChange)) * 1.1
+    return (transferDeltaV(centralBody, initialAltitude, initialAltitude, targetAltitude, targetAltitude)
+            + inclinationChangeDeltaV(centralBody,
+                                      max(initialAltitude, targetAltitude), max(initialAltitude, targetAltitude), inclinationChange))
 
 
-print(getDeltavFromInitialOrbitToTarget(
-    KspBody.bodies['mun'], KspBody.bodies['mun'].soi, 100e3, 90))
+# print()
+
+# print(getDeltavFromInitialOrbitToTarget(
+#     KspBody.bodies['mun'], KspBody.bodies['mun'].soi, 100e3, 90))
 
 
-print(getDeltavFromInitialOrbitToTarget(
-    KspBody.bodies['kerbin'], 74000, 500e3, 0))
+# print(type(getDeltavFromInitialOrbitToTarget(
+#     KspBody.bodies['kerbin'], 74000, 500e3, 0)))

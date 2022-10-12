@@ -1,6 +1,9 @@
 def thousandSeparated(n):
     return "{:,}".format(n)
 
+def removeThousandSeparator(n):
+    return n.replace(',', '')
+
 def sec2prettyTime(seconds):
 
     timeStr = ""

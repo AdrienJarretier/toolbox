@@ -18,7 +18,8 @@ from consolemenu.menu_component import Dimension
 
 from KspBody import KspBody
 from orbitalPeriod import stationaryAltitude
-from utils import thousandSeparated
+from requiredDeltaVForOrbit import getDeltavFromInitialOrbitToTarget, inclinationChangeDeltaV
+from utils import removeThousandSeparator, thousandSeparated
 
 formatter = consolemenu.MenuFormatBuilder(Dimension(width=70, height=40))
 
@@ -32,7 +33,8 @@ formatter.set_bottom_margin(0)
 
 
 # Create the menu
-menu = ConsoleMenu("KSP, Rockets engineering computation", formatter=formatter)
+menu = ConsoleMenu("KSP, Rockets engineering computation",
+                   formatter=formatter, clear_screen=False)
 # Create some items
 
 # # MenuItem is the base class for all items, it doesn't do anything when selected
@@ -54,9 +56,12 @@ menu = ConsoleMenu("KSP, Rockets engineering computation", formatter=formatter)
 # submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
 
 bodiesList = KspBody.bodiesList()
-bodiesSelectionMenu = SelectionMenu(bodiesList, "stationary altitute")
+bodiesSelectionMenu = SelectionMenu(
+    bodiesList, "Select the orbiting body", formatter=formatter, clear_screen=False)
 SubmenuItem_stationaryAltitude = SubmenuItem(
     "stationary altitute", bodiesSelectionMenu, menu, True)
+SubmenuItem_inclinationChange = SubmenuItem(
+    "inclination change", bodiesSelectionMenu, menu, True)
 
 # Once we're done creating them, we just add the items to the menu
 # menu.append_item(menu_item)
@@ -64,6 +69,7 @@ SubmenuItem_stationaryAltitude = SubmenuItem(
 # menu.append_item(command_item)
 # menu.append_item(submenu_item)
 menu.append_item(SubmenuItem_stationaryAltitude)
+menu.append_item(SubmenuItem_inclinationChange)
 
 
 restartMenu = True
@@ -78,12 +84,39 @@ while restartMenu:
     if menu.selected_item == menu.exit_item:
         restartMenu = False
 
-    if mainMenuSelection == 0:
-        if bodiesSelectionMenu.selected_item != bodiesSelectionMenu.exit_item:
-            selectedBody = bodiesList[bodiesSelectionMenu.selected_option]
-            print('## Stationary altitude around '+selectedBody+' : ',
-                  thousandSeparated(round(stationaryAltitude(KspBody.bodies[selectedBody]))),'meters')
+    def getSelectedBody():
+        selectedBody = bodiesList[bodiesSelectionMenu.selected_option]
+        return KspBody.bodies[selectedBody]
+
+    def itemSelected(selectionMenu: SelectionMenu):
+        global restartMenu
+        if selectionMenu.selected_item != selectionMenu.exit_item:
             restartMenu = False
+
+        return not restartMenu
+
+    if mainMenuSelection == 0:
+        if itemSelected(bodiesSelectionMenu):
+            centralBody = getSelectedBody()
+            altitude = stationaryAltitude(centralBody)
+
+            print('## Stationary altitude around '+centralBody.name+' : ',
+                  thousandSeparated(round(altitude)), 'meters')
+
+            print('## delta V from 0 to Stationary altitude :', thousandSeparated(
+                round(getDeltavFromInitialOrbitToTarget(centralBody, 0, altitude, 0))), 'm/s')
+
+    if mainMenuSelection == 1:
+        if itemSelected(bodiesSelectionMenu):
+            centralBody = getSelectedBody()
+            print('Inclination change around ' + centralBody.name)
+            angle = float(input('Angle (degrees) : '))
+            apoapsisAltitude = float(removeThousandSeparator(
+                input('Apoapsis Altitude (meters) : ')))
+            periapsisAltitude = float(removeThousandSeparator(
+                input('Periapsis Altitude (meters) : ')))
+            print('\n## delta V :', round(inclinationChangeDeltaV(
+                centralBody, apoapsisAltitude, periapsisAltitude, angle), 'm/s'))
 
 
 # print(mainMenuSelection)

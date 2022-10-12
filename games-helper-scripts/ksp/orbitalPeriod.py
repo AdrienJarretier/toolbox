@@ -50,19 +50,6 @@ def transferDeltaV(centralBody, origApoapsis, origPeriapsis, targetApoapsis, tar
 
 
 
-# altitudes in meters
-# angle in degrees
-# returns deltaV in meters / second
-def inclinationChangeDeltaV(centralBody, apoapsisAltitude, periapsisAltitude, angle):
-
-    angle = angle * math.pi / 180
-
-    speed = orbitalSpeed(centralBody, apoapsisAltitude, periapsisAltitude)
-
-    dv = 2*speed*math.sin(angle/2)
-
-    return dv
-
 
 
 # orbitalPeriod in seconds
@@ -169,4 +156,4 @@ def electricityStorage(centralBody, apoapsis, periapsis, electricConsumption):
 # print(inclinationChangeDeltaV(KspBody.bodies['mun'], 14000, 14000, 90))
 # print(inclinationChangeDeltaV(KspBody.bodies['minmus'], 10000, 10000, 90))
 
-print(thousandSeparated(stationaryAltitude(KspBody.bodies['minmus'])))
+# print(thousandSeparated(stationaryAltitude(KspBody.bodies['minmus'])))
