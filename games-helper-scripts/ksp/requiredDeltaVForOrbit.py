@@ -46,8 +46,6 @@ def inclinationChangeDeltaV(centralBody: KspBody, apoapsisAltitude: float, peria
     return dv
 
 
-# altitudes in meters
-# returns deltaV in meters / second including a 10 % margin
 def getDeltavFromInitialOrbitToTarget(centralBody: KspBody, initialAltitude: float, targetAltitude: float, inclinationChange: float) -> float:
     """
     Compute Delta V required to go from one initial orbit altitude to another (assuming circular)

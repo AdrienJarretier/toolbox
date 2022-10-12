@@ -59,18 +59,18 @@ menu = ConsoleMenu("KSP, Rockets engineering computation",
 bodiesList = KspBody.bodiesList()
 bodiesSelectionMenu = SelectionMenu(
     bodiesList, "Select the orbiting body", formatter=formatter, clear_screen=False)
-SubmenuItem_stationaryAltitude = SubmenuItem(
-    "stationary altitute", bodiesSelectionMenu, menu, True)
-SubmenuItem_inclinationChange = SubmenuItem(
-    "inclination change", bodiesSelectionMenu, menu, True)
 
 # Once we're done creating them, we just add the items to the menu
 # menu.append_item(menu_item)
 # menu.append_item(function_item)
 # menu.append_item(command_item)
 # menu.append_item(submenu_item)
-menu.append_item(SubmenuItem_stationaryAltitude)
-menu.append_item(SubmenuItem_inclinationChange)
+menu.append_item(SubmenuItem(
+    "stationary altitute", bodiesSelectionMenu, menu, True))
+menu.append_item(SubmenuItem(
+    "inclination change", bodiesSelectionMenu, menu, True))
+menu.append_item(SubmenuItem(
+    "Orbital transfer", bodiesSelectionMenu, menu, True))
 
 
 restartMenu = True
@@ -124,6 +124,20 @@ while restartMenu:
                 input('Periapsis Altitude (meters) : ')))
             print('\n## delta V :', round(inclinationChangeDeltaV(
                 centralBody, apoapsisAltitude, periapsisAltitude, angle)), 'm/s')
+
+    if mainMenuSelection == 2:
+        if itemSelected(bodiesSelectionMenu):
+            centralBody = getSelectedBody()
+            print('Orbital transfer around ' + centralBody.name)
+
+            initialAltitude = float(removeThousandSeparator(
+                input('Initial Altitude (meters) : ')))
+            targetAltitude = float(removeThousandSeparator(
+                input('Target Altitude (meters) : ')))
+            inclinationChange = float(input('Inclination Change (degrees) : '))
+
+            print('\n## delta V :', round(getDeltavFromInitialOrbitToTarget(
+                centralBody, initialAltitude, targetAltitude, inclinationChange)), 'm/s')
 
 
 # print(mainMenuSelection)
