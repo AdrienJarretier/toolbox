@@ -4,7 +4,6 @@ from utils import *
 import math
 
 
-
 # altitudes in meters
 # returns deltaV in meters / second
 def transferDeltaV(centralBody, origApoapsis, origPeriapsis, targetApoapsis, targetPeriapsis):

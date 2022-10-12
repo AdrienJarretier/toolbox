@@ -104,12 +104,14 @@ while restartMenu:
             print('## Stationary altitude around '+centralBody.name+' : ',
                   thousandSeparated(round(altitude)), 'meters')
 
-            transferDeltaV = getDeltavFromInitialOrbitToTarget(centralBody, 0, altitude, 0)
+            transferDeltaV = getDeltavFromInitialOrbitToTarget(
+                centralBody, 0, altitude, 0)
             surfaceOrbitalSpeed = orbitalSpeed(centralBody, altitude, altitude)
-            missingSpeedToOrbit = max(surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed(),0)
+            missingSpeedToOrbit = max(
+                surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed(), 0)
 
             print('## delta V from ground to Stationary altitude :',
-            thousandSeparated(round( missingSpeedToOrbit+transferDeltaV )), 'm/s')
+                  thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
 
     if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):
