@@ -7,11 +7,14 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH = 62
-currentTemp = 22.6
+currentRH = 84
+currentTemp = 25.1
 
-tmpRH = 62
-tmpTemp = 22.6
+
+TARGET_RH_TIMES_HUNDRED = 50
+
+tmpRH = 82
+tmpTemp = 18.8
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))
@@ -96,7 +99,6 @@ rh_whenReturning_tempBeforeOpening_times_hundred = round(
 #                   rh_whenReturning_tempBeforeOpening_times_hundred, '% at', currentTemp, 'C')
 
 
-TARGET_RH_TIMES_HUNDRED = 38
 
 print()
 print('temperature before opening windows :', tempBeforeOpening)

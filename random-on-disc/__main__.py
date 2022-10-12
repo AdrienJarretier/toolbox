@@ -8,18 +8,20 @@ import matplotlib.image as mpimg
 import string
 import random
 
-# SEED = random.randrange(2**64)
 
-SEED = 8126021129041542390
-EXCLUDED_LABELS = ['A', 'E', 'G', 'D']
+POINTS_COUNT = 7
 
-# SEED = 2185830464007306698
-# EXCLUDED_LABELS = ['A']
+# SEED = 8126021129041542390
+# EXCLUDED_LABELS = ['A', 'E', 'G', 'D']
 
-random.seed(SEED)
+try:
+    random.seed(SEED)
+except:
+    SEED = random.randrange(2**64)
+    random.seed(SEED)
 
 
-img = mpimg.imread('test_images/20211125-1419.png')
+img = mpimg.imread('test_images/20220714010910_1.jpg')
 # img = None
 
 DISTRIB_RAIDUS_CAP = 0.3
@@ -30,8 +32,6 @@ if img is not None:
     TOTAL_CIRCLE_RADIUS = max(img.shape[0], img.shape[1])/2
 else:
     TOTAL_CIRCLE_RADIUS = 400
-
-POINTS_COUNT = 8
 
 points = []
 
