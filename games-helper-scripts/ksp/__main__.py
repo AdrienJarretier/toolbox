@@ -106,9 +106,8 @@ while restartMenu:
 
             transferDeltaV = getDeltavFromInitialOrbitToTarget(
                 centralBody, 0, altitude, 0)
-            surfaceOrbitalSpeed = orbitalSpeed(centralBody, altitude, altitude)
-            missingSpeedToOrbit = max(
-                surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed(), 0)
+            surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
+            missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
 
             print('## delta V from ground to Stationary altitude :',
                   thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
@@ -136,8 +135,17 @@ while restartMenu:
                 input('Target Altitude (meters) : ')))
             inclinationChange = float(input('Inclination Change (degrees) : '))
 
-            print('\n## delta V :', round(getDeltavFromInitialOrbitToTarget(
-                centralBody, initialAltitude, targetAltitude, inclinationChange)), 'm/s')
+            transferDeltaV = getDeltavFromInitialOrbitToTarget(
+                centralBody, initialAltitude, targetAltitude, inclinationChange)
+            surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
+            missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
+
+            if initialAltitude == 0:
+                print('\n## delta V from ground to Stationary altitude :',
+                      thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
+            else:
+                print('\n## delta V :', thousandSeparated(
+                    round(transferDeltaV)), 'm/s')
 
 
 # print(mainMenuSelection)
