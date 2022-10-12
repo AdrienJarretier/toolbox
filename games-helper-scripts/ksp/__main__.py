@@ -1,8 +1,11 @@
 # Import the necessary packages
+import math
 import consolemenu
 from consolemenu import *
 from consolemenu.items import *
 from consolemenu.menu_component import Dimension
+
+from scipy.constants import g
 
 # from consolemenu.prompt_utils import PromptUtils
 
@@ -130,22 +133,43 @@ while restartMenu:
             print('Orbital transfer around ' + centralBody.name)
 
             initialAltitude = float(removeThousandSeparator(
-                input('Initial Altitude (meters) : ')))
+                input('Initial Altitude (km) : ')))*1000
             targetAltitude = float(removeThousandSeparator(
-                input('Target Altitude (meters) : ')))
+                input('Target Altitude (km) : ')))*1000
             inclinationChange = float(input('Inclination Change (degrees) : '))
 
-            transferDeltaV = getDeltavFromInitialOrbitToTarget(
-                centralBody, initialAltitude, targetAltitude, inclinationChange)
-            surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
-            missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
+            # transferDeltaV = getDeltavFromInitialOrbitToTarget(
+            #     centralBody, initialAltitude, targetAltitude, inclinationChange)
+
+            targetOrbitalSpeed = orbitalSpeed(
+                centralBody, targetAltitude, targetAltitude)
 
             print('\n## Orbital speed at', targetAltitude, 'm :', thousandSeparated(
-                round(orbitalSpeed(centralBody, targetAltitude, targetAltitude))), 'm/s')
+                round(targetOrbitalSpeed)), 'm/s')
 
             if initialAltitude == 0:
+
+                print('\natmosphere height :', centralBody.atmoHeight, 'm')
+                print('acceleration assuming 2 TWR :',
+                      g, 'm/s²')
+                timeToReachSpace = math.sqrt(2*centralBody.atmoHeight/g)
+                deltaVtoReachSpace = g*timeToReachSpace
+                speedUponReachingSpace = deltaVtoReachSpace+centralBody.surfaceLinearSpeed()
+                print('timeToReachSpace :', round(timeToReachSpace), 's')
+                print('speedUponReachingSpace :', round(
+                    speedUponReachingSpace), 'm/s')
+                wasteddeltaV = g*timeToReachSpace
+                print('wasted delta V :', round(wasteddeltaV), 'm/s')
+
+                # surfaceOrbitalSpeed = orbitalSpeed(centralBody, 0, 0)
+                # missingSpeedToOrbit = surfaceOrbitalSpeed-centralBody.surfaceLinearSpeed()
+                missingSpeed = orbitalSpeed(centralBody, centralBody.atmoHeight, centralBody.atmoHeight) - speedUponReachingSpace
+
+                deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(centralBody, centralBody.atmoHeight, targetAltitude, inclinationChange)
+                print('\ndelta V from space edge to target :', deltaVToFinalTarget)
                 print('\n## delta V from ground to target altitude :',
-                      thousandSeparated(round(missingSpeedToOrbit+transferDeltaV)), 'm/s')
+                      thousandSeparated(round(missingSpeed + wasteddeltaV + deltaVtoReachSpace + deltaVToFinalTarget)), 'm/s')
+
             else:
                 print('\n## delta V :', thousandSeparated(
                     round(transferDeltaV)), 'm/s')
