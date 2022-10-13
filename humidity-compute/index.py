@@ -7,15 +7,15 @@
 from asyncore import read
 from math import ceil, floor
 
-currentRH = 75
-currentTemp = 24.6
+currentRH = 78
+currentTemp = 25
 
 
 
 TARGET_RH_TIMES_HUNDRED = 50
 
-tmpRH = 82
-tmpTemp = 18.8
+tmpRH = 73
+tmpTemp = 19.1
 
 # currentRH_times_hundred = int(input("current RH : "))
 # currentTemp = float(input("current temp : "))

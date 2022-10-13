@@ -172,10 +172,18 @@ while restartMenu:
 
                 deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(
                     centralBody, centralBody.atmoHeight, targetAltitude, inclinationChange)
-                print('\ndelta V from space edge to target :',
-                      thousandSeparated(round(deltaVToFinalTarget)), 'm/s')
-                print('\n## delta V from ground to target altitude :',
-                      thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s')
+                print('\n## delta V from space edge to target (+10% margin for error) :',
+                      thousandSeparated(round(deltaVToFinalTarget*RESULTS_ERROR_MARGIN)), 'm/s')
+
+                print('## delta V from ground to target altitude (+10% margin for error) :', thousandSeparated(round(
+                    (reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] +
+                     deltaVToFinalTarget)*RESULTS_ERROR_MARGIN
+                )), 'm/s',
+
+                    '('+thousandSeparated(round(
+                        reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] *
+                        RESULTS_ERROR_MARGIN
+                    )), 'to escape atmosphere +', thousandSeparated(round(deltaVToFinalTarget*RESULTS_ERROR_MARGIN)), 'for final orbit transfer )')
 
             else:
                 print('\n## delta V :', thousandSeparated(
