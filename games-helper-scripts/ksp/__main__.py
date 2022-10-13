@@ -107,8 +107,11 @@ while restartMenu:
             print('## Stationary altitude around '+centralBody.name+' : ',
                   thousandSeparated(round(altitude)), 'meters')
 
-            deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(centralBody, centralBody.atmoHeight, altitude, 0)
-            print('## delta V from ground to Stationary altitude :', thousandSeparated(round(centralBody.reachingSpaceCompute()['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s')
+            deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(
+                centralBody, centralBody.atmoHeight, altitude, 0)
+            reachingSpaceComputation = centralBody.reachingSpaceCompute()
+            print('## delta V from ground to Stationary altitude :', thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s',
+                  '('+thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'])), 'to escape atmosphere +', thousandSeparated(round(deltaVToFinalTarget)), 'for final orbit transfer )')
 
     if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):
@@ -158,14 +161,16 @@ while restartMenu:
                     speedUponReachingSpace), 'm/s')
                 print('wasted delta V :', round(wasteddeltaV), 'm/s')
 
-                deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(centralBody, centralBody.atmoHeight, targetAltitude, inclinationChange)
-                print('\ndelta V from space edge to target :', thousandSeparated(round(deltaVToFinalTarget)), 'm/s')
+                deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(
+                    centralBody, centralBody.atmoHeight, targetAltitude, inclinationChange)
+                print('\ndelta V from space edge to target :',
+                      thousandSeparated(round(deltaVToFinalTarget)), 'm/s')
                 print('\n## delta V from ground to target altitude :',
                       thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s')
 
             else:
                 print('\n## delta V :', thousandSeparated(
-                    round(getDeltavFromInitialOrbitToTarget(centralBody,initialAltitude,targetAltitude,inclinationChange))), 'm/s')
+                    round(getDeltavFromInitialOrbitToTarget(centralBody, initialAltitude, targetAltitude, inclinationChange))), 'm/s')
 
 
 # print(mainMenuSelection)
