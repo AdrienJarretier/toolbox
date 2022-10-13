@@ -75,6 +75,7 @@ menu.append_item(SubmenuItem(
 menu.append_item(SubmenuItem(
     "Orbital transfer", bodiesSelectionMenu, menu, True))
 
+RESULTS_ERROR_MARGIN = 1.1  # 10 %
 
 restartMenu = True
 while restartMenu:
@@ -110,8 +111,16 @@ while restartMenu:
             deltaVToFinalTarget = getDeltavFromInitialOrbitToTarget(
                 centralBody, centralBody.atmoHeight, altitude, 0)
             reachingSpaceComputation = centralBody.reachingSpaceCompute()
-            print('## delta V from ground to Stationary altitude :', thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] + deltaVToFinalTarget)), 'm/s',
-                  '('+thousandSeparated(round(reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'])), 'to escape atmosphere +', thousandSeparated(round(deltaVToFinalTarget)), 'for final orbit transfer )')
+
+            print('## delta V from ground to Stationary altitude (+10% margin for error) :', thousandSeparated(round(
+                (reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] +
+                 deltaVToFinalTarget)*RESULTS_ERROR_MARGIN
+            )), 'm/s',
+
+                '('+thousandSeparated(round(
+                    reachingSpaceComputation['deltaV_from_ground_to_lowestOrbit'] *
+                    RESULTS_ERROR_MARGIN
+                )), 'to escape atmosphere +', thousandSeparated(round(deltaVToFinalTarget*RESULTS_ERROR_MARGIN)), 'for final orbit transfer )')
 
     if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):
