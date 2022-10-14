@@ -1,5 +1,6 @@
 # Import the necessary packages
 import math
+from pprint import pprint
 import consolemenu
 from consolemenu import *
 from consolemenu.items import *
@@ -64,10 +65,8 @@ bodiesSelectionMenu = SelectionMenu(
     bodiesList, "Select the orbiting body", formatter=formatter, clear_screen=False)
 
 # Once we're done creating them, we just add the items to the menu
-# menu.append_item(menu_item)
-# menu.append_item(function_item)
-# menu.append_item(command_item)
-# menu.append_item(submenu_item)
+menu.append_item(MenuItem(
+    "Bodies stats", menu, True))
 menu.append_item(SubmenuItem(
     "stationary altitute", bodiesSelectionMenu, menu, True))
 menu.append_item(SubmenuItem(
@@ -101,6 +100,13 @@ while restartMenu:
         return not restartMenu
 
     if mainMenuSelection == 0:
+        for bodyName, body in KspBody.bodies.items():
+            print('\n' + body.name.title() + '')
+            body.printStats()
+
+        exit()
+
+    if mainMenuSelection == 1:
         if itemSelected(bodiesSelectionMenu):
             centralBody = getSelectedBody()
             altitude = stationaryAltitude(centralBody)
@@ -122,7 +128,7 @@ while restartMenu:
                     RESULTS_ERROR_MARGIN
                 )), 'to escape atmosphere +', thousandSeparated(round(deltaVToFinalTarget*RESULTS_ERROR_MARGIN)), 'for final orbit transfer )')
 
-    if mainMenuSelection == 1:
+    if mainMenuSelection == 2:
         if itemSelected(bodiesSelectionMenu):
             centralBody = getSelectedBody()
             print('Inclination change around ' + centralBody.name)
@@ -134,7 +140,7 @@ while restartMenu:
             print('\n## delta V :', round(inclinationChangeDeltaV(
                 centralBody, apoapsisAltitude, periapsisAltitude, angle)), 'm/s')
 
-    if mainMenuSelection == 2:
+    if mainMenuSelection == 3:
         if itemSelected(bodiesSelectionMenu):
             centralBody = getSelectedBody()
             print('Orbital transfer around ' + centralBody.name)
@@ -143,7 +149,7 @@ while restartMenu:
                 input('Initial Altitude (km) : ')))*1000
             targetAltitude = float(removeThousandSeparator(
                 input('Target Altitude (km) : ')))*1000
-            inclinationChange = float(input('Inclination Change (degrees) : '))
+            inclinationChange = float(input('Inclination Change (degrees) : ') or 0)
 
             # transferDeltaV = getDeltavFromInitialOrbitToTarget(
             #     centralBody, initialAltitude, targetAltitude, inclinationChange)

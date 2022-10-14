@@ -1,5 +1,8 @@
 import math
 from scipy.constants import G, g
+from tabulate import tabulate
+
+from utils import removeThousandSeparator, sec2prettyTime, thousandSeparated
 
 
 def semiMajorAxis(centralBodyRadius, apoapsisAltitude, periapsisAltitude):
@@ -45,7 +48,7 @@ class KspBody:
     # mass in kg
     # radius in meters
     # rotationPeriod (sidereal rotation) in seconds
-    def __init__(self, name: str, mass: float, radius: float, rotationPeriod: float, soi: float, atmoHeight: float):
+    def __init__(self, name: str, mass: float, radius: float, rotationPeriod: float, soi: float, atmoHeight: float, altitude: float):
         """
         Instantiate new Body such as Kerbin
 
@@ -54,8 +57,9 @@ class KspBody:
             mass: in kg
             radius: in meters
             rotationPeriod: sidereal rotation in seconds
-            soi: Sphere of Influence in meters
+            soi: Sphere of Influence in km
             atmoHeight: upper limit of the atmosphere in meters
+            altitude: the orbit altitute of the body around the primary body in meters
         """
 
         self.name = name
@@ -64,10 +68,21 @@ class KspBody:
         self.rotationPeriod = rotationPeriod
         self.soi = soi
         self.atmoHeight = atmoHeight
+        self.altitude = altitude
 
         self.standardGravitationalParameter = G * self.mass
 
         self.bodies[name] = self
+
+    def printStats(self) -> None:
+        print(tabulate([
+            ['SOI', thousandSeparated(round(self.soi)) + ' km' if self.soi else 'N/A'],
+            ['Orbiting altitude', thousandSeparated(round(self.altitude/1000)) + ' km' if self.soi else 'N/A'],
+            ['Sidereal rotation period', sec2prettyTime(self.rotationPeriod)]
+        ]))
+
+        # print('SOI :', thousandSeparated(round(self.soi)), 'km')
+        # print('Orbiting altitude :', thousandSeparated(round(self.altitude/1000)), 'km')
 
     def surfaceLinearSpeed(self) -> float:
         """
@@ -98,7 +113,31 @@ class KspBody:
         }
 
 
-KspBody("kerbin", 5.2915158e22, 600e3, 21549.425, None, 70000)
-KspBody("mun", 9.76e20, 200e3, 138984.38, 2429559.1, 0)
-KspBody("minmus", 2.646e19, 60e3, 1*6*3600+5*3600+13*60, None, 0)
-KspBody("sun", 1.7565459e28, 261600000, 432000, None, None)
+KspBody("kerbin",
+        5.2915158e22,
+        600e3,
+        21549.425,
+        84159,
+        70000,
+        float(removeThousandSeparator('13,338,240,256')))
+KspBody("mun",
+        9.76e20,
+        200e3,
+        138984.38,
+        2430,
+        0,
+        11400000)
+KspBody("minmus",
+        2.646e19,
+        60e3,
+        1*6*3600+5*3600+13*60,
+        None,
+        0,
+        None)
+KspBody("sun",
+        1.7565459e28,
+        261600000,
+        432000,
+        None,
+        None,
+        None)
